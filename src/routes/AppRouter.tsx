@@ -9,6 +9,7 @@ import { Home } from "../views/pages/Home";
 import { Login } from "../views/pages/Login";
 import { Register } from "../views/pages/Register";
 import { Conversation } from "../views/pages/Conversation";
+import Dashboard from "../views/pages/Dashboard/Dashboard";
 
 export const AppRouter: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ export const AppRouter: React.FC = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/chat" element={<Conversation />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

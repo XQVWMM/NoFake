@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { HomeModel } from "../models/HomeModel";
+import { useNavigation } from "../hooks/useNavigation";
 import type { StatisticData, FeatureData } from "../models/HomeModel";
 
 export type ActiveButton = "daftar" | "masuk" | null;
@@ -19,6 +20,7 @@ export interface HomeControllerReturn {
 
 export const useHomeController = (): HomeControllerReturn => {
   const homeModel = new HomeModel();
+  const navigation = useNavigation();
 
   const [activeButton, setActiveButton] = useState<ActiveButton>(null);
   const [features] = useState<FeatureData[]>(homeModel.getFeatures());
@@ -30,6 +32,7 @@ export const useHomeController = (): HomeControllerReturn => {
   // Button handlers
   const handleButtonClick = (button: "daftar" | "masuk") => {
     setActiveButton(button);
+    navigateToAuth(button);
   };
 
   const isActive = (button: "daftar" | "masuk") => activeButton === button;
@@ -41,9 +44,11 @@ export const useHomeController = (): HomeControllerReturn => {
   };
 
   const navigateToAuth = (type: "daftar" | "masuk") => {
-    // Future implementation for navigation
-    console.log(`Navigating to ${type}...`);
-    // Example: navigate(`/${type}`);
+    if (type === "daftar") {
+      navigation.goToRegister();
+    } else if (type === "masuk") {
+      navigation.goToLogin();
+    }
   };
 
   return {

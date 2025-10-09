@@ -24,7 +24,7 @@ const Login: React.FC = () => {
     handleSubmit,
     goToRegister,
     goToHome,
-  } = useAuthController();
+  } = useAuthController("login");
 
   // Show loading state
   if (isLoading) {

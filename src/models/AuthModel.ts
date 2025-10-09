@@ -1,10 +1,17 @@
 import type { User, UserCredential } from "firebase/auth";
 import {
   signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { doc, getDoc, updateDoc, serverTimestamp } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  setDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 import { auth, db } from "../config/firebase";
 
 export interface LoginCredentials {
@@ -12,16 +19,27 @@ export interface LoginCredentials {
   password: string;
 }
 
+export interface RegisterCredentials {
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
 export interface LoginValidationErrors {
   email?: string;
   password?: string;
 }
 
+export interface RegisterValidationErrors {
+  email?: string;
+  password?: string;
+  confirmPassword?: string;
+}
+
 export interface UserProfile {
   uid: string;
   email: string;
-  displayName?: string;
-  photoURL?: string;
+  name: string;
   createdAt: any;
   lastLoginAt: any;
   isActive: boolean;
@@ -42,8 +60,17 @@ export class AuthModel {
     forgotPasswordText: "Lupa kata sandi?",
   };
 
-  getAppInfo() {
-    return this.loginInfo;
+  private registerInfo = {
+    welcomeMessage: "Selamat Datang,",
+    title: "Daftar ke NoFake",
+    desktopTitle: "Daftar ke NoFake",
+    submitButtonText: "Daftar",
+    hasAccountText: "Sudah memiliki akun?",
+    loginLinkText: "Masuk",
+  };
+
+  getAppInfo(mode: "login" | "register" = "login") {
+    return mode === "login" ? this.loginInfo : this.registerInfo;
   }
 
   // Firebase Authentication Methods
@@ -62,6 +89,22 @@ export class AuthModel {
       return user;
     } catch (error) {
       console.error("Sign in error:", error);
+      throw error;
+    }
+  }
+
+  async signUp(email: string, password: string): Promise<User> {
+    try {
+      const userCredential: UserCredential =
+        await createUserWithEmailAndPassword(this.auth, email, password);
+      const user = userCredential.user;
+
+      // Create user document in Firestore with empty name
+      await this.createUserProfile(user, email);
+
+      return user;
+    } catch (error) {
+      console.error("Sign up error:", error);
       throw error;
     }
   }
@@ -111,6 +154,25 @@ export class AuthModel {
     }
   }
 
+  // Create user profile in Firestore
+  private async createUserProfile(user: User, email: string): Promise<void> {
+    try {
+      const userProfile: UserProfile = {
+        uid: user.uid,
+        email: email,
+        name: "", // Empty string as requested
+        createdAt: serverTimestamp(),
+        lastLoginAt: serverTimestamp(),
+        isActive: true,
+      };
+
+      await setDoc(doc(this.db, "users", user.uid), userProfile);
+    } catch (error) {
+      console.error("Create user profile error:", error);
+      throw error;
+    }
+  }
+
   // Validation Methods
   validateCredentials(credentials: LoginCredentials): LoginValidationErrors {
     const errors: LoginValidationErrors = {};
@@ -132,8 +194,42 @@ export class AuthModel {
     return errors;
   }
 
+  validateRegisterCredentials(
+    credentials: RegisterCredentials
+  ): RegisterValidationErrors {
+    const errors: RegisterValidationErrors = {};
+
+    // Email validation
+    if (!credentials.email) {
+      errors.email = "Email harus diisi";
+    } else if (!/\S+@\S+\.\S+/.test(credentials.email)) {
+      errors.email = "Format email tidak valid";
+    }
+
+    // Password validation
+    if (!credentials.password) {
+      errors.password = "Kata sandi harus diisi";
+    } else if (credentials.password.length < 6) {
+      errors.password = "Kata sandi minimal 6 karakter";
+    }
+
+    // Confirm password validation
+    if (!credentials.confirmPassword) {
+      errors.confirmPassword = "Konfirmasi kata sandi harus diisi";
+    } else if (credentials.password !== credentials.confirmPassword) {
+      errors.confirmPassword = "Kata sandi tidak sama";
+    }
+
+    return errors;
+  }
+
   isValidCredentials(credentials: LoginCredentials): boolean {
     const errors = this.validateCredentials(credentials);
+    return Object.keys(errors).length === 0;
+  }
+
+  isValidRegisterCredentials(credentials: RegisterCredentials): boolean {
+    const errors = this.validateRegisterCredentials(credentials);
     return Object.keys(errors).length === 0;
   }
 
@@ -156,6 +252,12 @@ export class AuthModel {
         return "Kredensial tidak valid. Silakan coba lagi.";
       case "auth/user-token-expired":
         return "Sesi telah berakhir. Silakan masuk kembali.";
+      case "auth/email-already-in-use":
+        return "Email sudah terdaftar. Silakan gunakan email lain atau masuk.";
+      case "auth/weak-password":
+        return "Kata sandi terlalu lemah. Gunakan minimal 6 karakter.";
+      case "auth/operation-not-allowed":
+        return "Operasi tidak diizinkan. Hubungi administrator.";
 
       // Firestore errors
       case "permission-denied":
