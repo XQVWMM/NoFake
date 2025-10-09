@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import logo from "../assets/logo.png";
-import logo2 from "../assets/logo2.png";
-import globe from "../assets/globe-svgrepo-com.png";
-import calender from "../assets/calender-svgrepo-com.png";
+import logo from "../../../assets/logo.png";
+import logo2 from "../../../assets/logo2.png";
+import globe from "../../../assets/globe-svgrepo-com.png";
+import calender from "../../../assets/calender-svgrepo-com.png";
 
 const Home: React.FC = () => {
-  const [activeButton, setActiveButton] = useState<"daftar" | "masuk" | null>(null);
+  const [activeButton, setActiveButton] = useState<"daftar" | "masuk" | null>(
+    null
+  );
 
   const handleButtonClick = (button: "daftar" | "masuk") => {
     setActiveButton(button);
@@ -105,7 +107,9 @@ const Home: React.FC = () => {
                   />
                 </div>
               </div>
-              <p className="text-[14px] sm:text-[16px] mt-[4px]">Puncak Kasus Bulanan</p>
+              <p className="text-[14px] sm:text-[16px] mt-[4px]">
+                Puncak Kasus Bulanan
+              </p>
               <p className="text-[12px] sm:text-[14px] max-w-[161px] mt-[10px]">
                 Jumlah kasus hoaks terbanyak terjadi pada bulan September 2024.
               </p>
@@ -113,26 +117,32 @@ const Home: React.FC = () => {
 
             <div>
               <div className="flex items-end mt-[20px]">
-                <span className="text-[28px] sm:text-[32px] leading-none">2x</span>
+                <span className="text-[28px] sm:text-[32px] leading-none">
+                  2x
+                </span>
                 <span className="text-[14px] sm:text-[16px] leading-none ml-[13px]">
                   Lebih Cepat
                 </span>
               </div>
-              <p className="text-[14px] sm:text-[16px] mt-[4px]">Penyebaran Hoaks</p>
+              <p className="text-[14px] sm:text-[16px] mt-[4px]">
+                Penyebaran Hoaks
+              </p>
               <p className="text-[12px] sm:text-[14px] max-w-[161px] mt-[10px]">
                 Hoaks dapat viral dalam hitungan menit, jauh lebih cepat
                 daripada klarifikasi.
               </p>
             </div>
 
-             <div>
+            <div>
               <div className="flex items-end mt-[20px]">
-                <span className="text-[28px] sm:text-[32px] leading-none">70%</span>
-                <span className="sm:text-[28px] leading-none ml-[3px]">
-                  +
+                <span className="text-[28px] sm:text-[32px] leading-none">
+                  70%
                 </span>
+                <span className="sm:text-[28px] leading-none ml-[3px]">+</span>
               </div>
-              <p className="text-[14px] sm:text-[16px] mt-[4px]">Penyebaran Hoaks</p>
+              <p className="text-[14px] sm:text-[16px] mt-[4px]">
+                Penyebaran Hoaks
+              </p>
               <p className="text-[12px] sm:text-[14px] max-w-[161px] mt-[10px]">
                 Hoaks dapat viral dalam hitungan menit, jauh lebih cepat
                 daripada klarifikasi.
@@ -159,7 +169,9 @@ const Home: React.FC = () => {
                   <p className="text-[18px] sm:text-[28px] font-medium">
                     Akses instan
                   </p>
-                  <p className="text-[14px] sm:text-[14px]">melalui WhatsApp Bot</p>
+                  <p className="text-[14px] sm:text-[14px]">
+                    melalui WhatsApp Bot
+                  </p>
                 </div>
                 <div>
                   <p className="text-[18px] sm:text-[20px] font-medium">
@@ -172,7 +184,9 @@ const Home: React.FC = () => {
           </div>
 
           <div className="relative bg-[#345A66] p-[20px] sm:pl-[30px] rounded-[24px] shadow-md">
-            <h3 className="text-[24px] sm:text-[32px] mb-[20px]">Mulai Verifikasi</h3>
+            <h3 className="text-[24px] sm:text-[32px] mb-[20px]">
+              Mulai Verifikasi
+            </h3>
             <p className="text-white pb-16 max-w-[429px]">
               Bagikan tautan atau cuplikan berita yang meragukan, dan dapatkan
               hasil verifikasi yang jelas, akurat, serta mudah dipahami.

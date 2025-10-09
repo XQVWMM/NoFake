@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Input } from "./Input";
 import { Label } from "./Label";
-import mail from "../assets/Mail.png";
-import eyesN from "../assets/eyesN.png";
-import eyes from "../assets/eyes.png";
+import mail from "../../assets/Mail.png";
+import eyesN from "../../assets/eyesN.png";
+import eyes from "../../assets/eyes.png";
 
 interface InputProps {
   value?: string;
@@ -27,7 +27,6 @@ export function InputWithLabel({
       </Label>
 
       <div className="relative">
-
         {/* Input */}
         <Input
           type="text"
@@ -43,11 +42,7 @@ export function InputWithLabel({
           name={name}
         />
         <div className="absolute right-[20px] top-1/2 -translate-y-1/2">
-        <img
-          src={mail}
-          alt="Mail icon"
-          className=" w-5 h-5 "
-        />
+          <img src={mail} alt="Mail icon" className=" w-5 h-5 " />
         </div>
       </div>
 
@@ -63,12 +58,14 @@ export function InputWithLabelM({
 }: InputProps) {
   return (
     <div className="w-[85%] flex flex-col text-black space-y-1 ">
-      <Label htmlFor="email" className="text-[#172A3A] font-normal text-[18px] mb-[10px]">
+      <Label
+        htmlFor="email"
+        className="text-[#172A3A] font-normal text-[18px] mb-[10px]"
+      >
         Email
       </Label>
 
       <div className="relative">
-
         {/* Input */}
         <Input
           type="text"
@@ -84,11 +81,7 @@ export function InputWithLabelM({
           name={name}
         />
         <div className="absolute right-[20px] top-1/2 -translate-y-1/2">
-        <img
-          src={mail}
-          alt="Mail icon"
-          className=" w-5 h-5 "
-        />
+          <img src={mail} alt="Mail icon" className=" w-5 h-5 " />
         </div>
       </div>
 
@@ -109,7 +102,6 @@ export function InputWithLabelE({
       </Label>
 
       <div className="relative">
-
         {/* Input */}
         <Input
           type="text"
@@ -125,11 +117,7 @@ export function InputWithLabelE({
           name={name}
         />
         <div className="absolute right-[20px] top-1/2 -translate-y-1/2">
-        <img
-          src={mail}
-          alt="Mail icon"
-          className=" w-5 h-5 "
-        />
+          <img src={mail} alt="Mail icon" className=" w-5 h-5 " />
         </div>
       </div>
 
@@ -145,12 +133,14 @@ export function InputWithLabelEE({
 }: InputProps) {
   return (
     <div className="w-[85%] flex flex-col text-[#172A3A ">
-      <Label htmlFor="email" className="text-[#172A3A] font-normal text-[18px] mb-[10px]">
+      <Label
+        htmlFor="email"
+        className="text-[#172A3A] font-normal text-[18px] mb-[10px]"
+      >
         Email
       </Label>
 
       <div className="relative">
-
         {/* Input */}
         <Input
           type="text"
@@ -166,11 +156,7 @@ export function InputWithLabelEE({
           name={name}
         />
         <div className="absolute right-[20px] top-1/2 -translate-y-1/2">
-        <img
-          src={mail}
-          alt="Mail icon"
-          className=" w-5 h-5 "
-        />
+          <img src={mail} alt="Mail icon" className=" w-5 h-5 " />
         </div>
       </div>
 
@@ -195,7 +181,10 @@ export function InputWithLabelPass({
 
   return (
     <div className="w-[85%] flex flex-col text-white space-y-1 mt-4 ">
-      <Label htmlFor="password" className="text-white text-[18px] mb-[10px] mt-[10px]">
+      <Label
+        htmlFor="password"
+        className="text-white text-[18px] mb-[10px] mt-[10px]"
+      >
         Kata Sandi
       </Label>
       <div className="relative">
@@ -212,19 +201,19 @@ export function InputWithLabelPass({
           autoComplete={autocomplete}
           style={{ textIndent: "10px" }}
         />
-      <div className="absolute right-[20px] top-1/2 -translate-y-1/2">
-        <button
-          type="button"
-          onClick={togglePasswordVisibility}
-          className=" focus:ring-0 hover:opacity-100 transition bg-transparent border-none outline-none"
-        >
-          <img
-            src={isPasswordVisible ? eyes : eyesN}
-            alt="Toggle visibility"
-            className="w-[20px] h-[20px]   object-contain select-none pointer-events-none"
-          />
-        </button>
-      </div>
+        <div className="absolute right-[20px] top-1/2 -translate-y-1/2">
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            className=" focus:ring-0 hover:opacity-100 transition bg-transparent border-none outline-none"
+          >
+            <img
+              src={isPasswordVisible ? eyes : eyesN}
+              alt="Toggle visibility"
+              className="w-[20px] h-[20px]   object-contain select-none pointer-events-none"
+            />
+          </button>
+        </div>
       </div>
 
       {error && <p className="text-red-300 text-sm mt-1">{error}</p>}
@@ -246,7 +235,10 @@ export function InputWithLabelPassM({
 
   return (
     <div className="w-[85%] flex flex-col  space-y-1 mt-4 ">
-      <Label htmlFor="password" className="text-[#172A3A] font-normal text-[18px] mb-[10px] mt-[30px]">
+      <Label
+        htmlFor="password"
+        className="text-[#172A3A] font-normal text-[18px] mb-[10px] mt-[30px]"
+      >
         Kata Sandi
       </Label>
       <div className="relative">
@@ -263,19 +255,19 @@ export function InputWithLabelPassM({
           autoComplete={autocomplete}
           style={{ textIndent: "10px" }}
         />
-      <div className="absolute right-[20px] top-1/2 -translate-y-1/2">
-        <button
-          type="button"
-          onClick={togglePasswordVisibility}
-          className=" focus:ring-0 hover:opacity-100 transition bg-transparent border-none outline-none"
-        >
-          <img
-            src={isPasswordVisible ? eyes : eyesN}
-            alt="Toggle visibility"
-            className="w-[20px] h-[20px]   object-contain select-none pointer-events-none"
-          />
-        </button>
-      </div>
+        <div className="absolute right-[20px] top-1/2 -translate-y-1/2">
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            className=" focus:ring-0 hover:opacity-100 transition bg-transparent border-none outline-none"
+          >
+            <img
+              src={isPasswordVisible ? eyes : eyesN}
+              alt="Toggle visibility"
+              className="w-[20px] h-[20px]   object-contain select-none pointer-events-none"
+            />
+          </button>
+        </div>
       </div>
 
       {error && <p className="text-red-300 text-sm mt-1">{error}</p>}
@@ -297,7 +289,10 @@ export function InputWithLabelPassR({
 
   return (
     <div className="w-[85%] flex flex-col text-white">
-      <Label htmlFor="password" className="text-white text-[18px] mb-[10px] mt-[10px]">
+      <Label
+        htmlFor="password"
+        className="text-white text-[18px] mb-[10px] mt-[10px]"
+      >
         Kata Sandi
       </Label>
       <div className="relative">
@@ -314,19 +309,19 @@ export function InputWithLabelPassR({
           autoComplete={autocomplete}
           style={{ textIndent: "10px" }}
         />
-      <div className="absolute right-[20px] top-1/2 -translate-y-1/2">
-        <button
-          type="button"
-          onClick={togglePasswordVisibility}
-          className=" focus:ring-0 hover:opacity-100 transition bg-transparent border-none outline-none"
-        >
-          <img
-            src={isPasswordVisible ? eyes : eyesN}
-            alt="Toggle visibility"
-            className="w-[20px] h-[20px]   object-contain select-none pointer-events-none"
-          />
-        </button>
-      </div>
+        <div className="absolute right-[20px] top-1/2 -translate-y-1/2">
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            className=" focus:ring-0 hover:opacity-100 transition bg-transparent border-none outline-none"
+          >
+            <img
+              src={isPasswordVisible ? eyes : eyesN}
+              alt="Toggle visibility"
+              className="w-[20px] h-[20px]   object-contain select-none pointer-events-none"
+            />
+          </button>
+        </div>
       </div>
 
       {error && <p className="text-red-300 text-sm mt-1">{error}</p>}
@@ -349,7 +344,10 @@ export function InputWithLabelPassRR({
 
   return (
     <div className="w-[85%] flex flex-col text-white">
-      <Label htmlFor="password" className="text-[#172A3A] font-normal text-[18px] mb-[10px] mt-[10px]">
+      <Label
+        htmlFor="password"
+        className="text-[#172A3A] font-normal text-[18px] mb-[10px] mt-[10px]"
+      >
         Kata Sandi
       </Label>
       <div className="relative">
@@ -366,19 +364,19 @@ export function InputWithLabelPassRR({
           autoComplete={autocomplete}
           style={{ textIndent: "10px" }}
         />
-      <div className="absolute right-[20px] top-1/2 -translate-y-1/2">
-        <button
-          type="button"
-          onClick={togglePasswordVisibility}
-          className=" focus:ring-0 hover:opacity-100 transition bg-transparent border-none outline-none"
-        >
-          <img
-            src={isPasswordVisible ? eyes : eyesN}
-            alt="Toggle visibility"
-            className="w-[20px] h-[20px]   object-contain select-none pointer-events-none"
-          />
-        </button>
-      </div>
+        <div className="absolute right-[20px] top-1/2 -translate-y-1/2">
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            className=" focus:ring-0 hover:opacity-100 transition bg-transparent border-none outline-none"
+          >
+            <img
+              src={isPasswordVisible ? eyes : eyesN}
+              alt="Toggle visibility"
+              className="w-[20px] h-[20px]   object-contain select-none pointer-events-none"
+            />
+          </button>
+        </div>
       </div>
 
       {error && <p className="text-red-300 text-sm mt-1">{error}</p>}
@@ -400,7 +398,10 @@ export function InputWithLabelPassCon({
 
   return (
     <div className="w-[85%] flex flex-col text-white space-y-1 mt-4 ">
-      <Label htmlFor="password" className="text-white text-[18px] mb-[10px] mt-[10px]">
+      <Label
+        htmlFor="password"
+        className="text-white text-[18px] mb-[10px] mt-[10px]"
+      >
         Kata Sandi (Konfirmasi)
       </Label>
       <div className="relative">
@@ -417,19 +418,19 @@ export function InputWithLabelPassCon({
           autoComplete={autocomplete}
           style={{ textIndent: "10px" }}
         />
-      <div className="absolute right-[20px] top-1/2 -translate-y-1/2">
-        <button
-          type="button"
-          onClick={togglePasswordVisibility}
-          className=" focus:ring-0 hover:opacity-100 transition bg-transparent border-none outline-none"
-        >
-          <img
-            src={isPasswordVisible ? eyes : eyesN}
-            alt="Toggle visibility"
-            className="w-[20px] h-[20px]   object-contain select-none pointer-events-none"
-          />
-        </button>
-      </div>
+        <div className="absolute right-[20px] top-1/2 -translate-y-1/2">
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            className=" focus:ring-0 hover:opacity-100 transition bg-transparent border-none outline-none"
+          >
+            <img
+              src={isPasswordVisible ? eyes : eyesN}
+              alt="Toggle visibility"
+              className="w-[20px] h-[20px]   object-contain select-none pointer-events-none"
+            />
+          </button>
+        </div>
       </div>
 
       {error && <p className="text-red-300 text-sm mt-1">{error}</p>}
@@ -452,7 +453,10 @@ export function InputWithLabelPassConn({
 
   return (
     <div className="w-[85%] flex flex-col text-[#172A3A] space-y-1 mt-4 ">
-      <Label htmlFor="password" className="text-[#172A3A] font-normal text-[18px] mb-[10px] mt-[10px]">
+      <Label
+        htmlFor="password"
+        className="text-[#172A3A] font-normal text-[18px] mb-[10px] mt-[10px]"
+      >
         Kata Sandi (Konfirmasi)
       </Label>
       <div className="relative">
@@ -469,19 +473,19 @@ export function InputWithLabelPassConn({
           autoComplete={autocomplete}
           style={{ textIndent: "10px" }}
         />
-      <div className="absolute right-[20px] top-1/2 -translate-y-1/2">
-        <button
-          type="button"
-          onClick={togglePasswordVisibility}
-          className=" focus:ring-0 hover:opacity-100 transition bg-transparent border-none outline-none"
-        >
-          <img
-            src={isPasswordVisible ? eyes : eyesN}
-            alt="Toggle visibility"
-            className="w-[20px] h-[20px]   object-contain select-none pointer-events-none"
-          />
-        </button>
-      </div>
+        <div className="absolute right-[20px] top-1/2 -translate-y-1/2">
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            className=" focus:ring-0 hover:opacity-100 transition bg-transparent border-none outline-none"
+          >
+            <img
+              src={isPasswordVisible ? eyes : eyesN}
+              alt="Toggle visibility"
+              className="w-[20px] h-[20px]   object-contain select-none pointer-events-none"
+            />
+          </button>
+        </div>
       </div>
 
       {error && <p className="text-red-300 text-sm mt-1">{error}</p>}

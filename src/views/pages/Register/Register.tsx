@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { InputWithLabel, InputWithLabelE, InputWithLabelEE, InputWithLabelPass, InputWithLabelPassCon, InputWithLabelPassConn, InputWithLabelPassR, InputWithLabelPassRR } from "../components/InputWithLabel";
-import arrow from "../assets/arrow-left-svgrepo-com.png";
+import {
+  InputWithLabel,
+  InputWithLabelE,
+  InputWithLabelEE,
+  InputWithLabelPass,
+  InputWithLabelPassCon,
+  InputWithLabelPassConn,
+  InputWithLabelPassR,
+  InputWithLabelPassRR,
+} from "../../components/InputWithLabel";
+import arrow from "../../../assets/arrow-left-svgrepo-com.png";
 import { Link } from "react-router-dom";
+
 const Register: React.FC = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
   const [email, setEmail] = useState("");
@@ -10,7 +20,7 @@ const Register: React.FC = () => {
 
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-   const [confirmPasswordError, setConfirmPasswordError] = useState(""); 
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   // Deteksi lebar layar dan update saat resize
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 640);
@@ -51,12 +61,11 @@ const Register: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validate()) {
-    console.log("Email:", email);
-    console.log("Password:", password);
-  } else {
-
-    console.log("Form tidak valid");
-  }
+      console.log("Email:", email);
+      console.log("Password:", password);
+    } else {
+      console.log("Form tidak valid");
+    }
   };
 
   return (
@@ -64,47 +73,73 @@ const Register: React.FC = () => {
       {/* Jika mobile */}
       {isMobile ? (
         <div className="flex flex-col  bg-[#ffff] w-full h-screen text-[#172A3A] ">
-          <img src={arrow} alt="" className="w-[55px] h-[55px] p-[10px]"/>
-          <div className="text-[32px]  pt-[5px] pl-[30px] text-left ">Selamat Datang, </div>
-          <div className="text-[32px]  pt-[5px] pl-[30px] text-left mb-[30px]">Daftar ke NoFake </div>
-          <form onSubmit={handleSubmit} noValidate className="flex flex-col items-center w-full space-y-5 text-black">
+          <img src={arrow} alt="" className="w-[55px] h-[55px] p-[10px]" />
+          <div className="text-[32px]  pt-[5px] pl-[30px] text-left ">
+            Selamat Datang,{" "}
+          </div>
+          <div className="text-[32px]  pt-[5px] pl-[30px] text-left mb-[30px]">
+            Daftar ke NoFake{" "}
+          </div>
+          <form
+            onSubmit={handleSubmit}
+            noValidate
+            className="flex flex-col items-center w-full space-y-5 text-black"
+          >
             <InputWithLabelEE
               value={email}
-              onChange={(e) => setEmail((e.target as HTMLInputElement).value)}
+              onChange={(e) =>
+                setEmail(
+                  typeof e === "string"
+                    ? e
+                    : (e.target as HTMLInputElement).value
+                )
+              }
               name="email"
               error={emailError}
             />
 
             <InputWithLabelPassRR
               value={password}
-              onChange={(e) => setPassword((e.target as HTMLInputElement).value)}
+              onChange={(e) =>
+                setPassword(
+                  typeof e === "string"
+                    ? e
+                    : (e.target as HTMLInputElement).value
+                )
+              }
               name="password"
               error={passwordError}
             />
 
             <InputWithLabelPassConn
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword((e.target as HTMLInputElement).value)}
+              onChange={(e) =>
+                setConfirmPassword(
+                  typeof e === "string"
+                    ? e
+                    : (e.target as HTMLInputElement).value
+                )
+              }
               name="confirmPassword"
               error={confirmPasswordError}
             />
-          <div className="w-[80%] justify-center mt-[50px]">
-            <button
-              type="submit"
-              className="w-full h-[55px] bg-[#345A66] text-[#ffff] border-0 rounded-[5px] text-[18px] hover:bg-gray-100"
-            >
-              Daftar
-            </button>
-
-            <p className="text-sm text-center text-[#172A3A] mt-4">
-              Sudah memiliki akun?{" "}
-              <Link
-                to="/login"
-                className="underline text-[#172A3A] hover:text-gray-200"
+            <div className="w-[80%] justify-center mt-[50px]">
+              <button
+                type="submit"
+                className="w-full h-[55px] bg-[#345A66] text-[#ffff] border-0 rounded-[5px] text-[18px] hover:bg-gray-100"
               >
-                Masuk
-              </Link>
-            </p>
+                Daftar
+              </button>
+
+              <p className="text-sm text-center text-[#172A3A] mt-4">
+                Sudah memiliki akun?{" "}
+                <Link
+                  to="/login"
+                  className="underline text-[#172A3A] hover:text-gray-200"
+                >
+                  Masuk
+                </Link>
+              </p>
             </div>
           </form>
         </div>
@@ -115,23 +150,45 @@ const Register: React.FC = () => {
             <div className="text-[28px] text-left ">Daftar ke NoFake</div>
           </div>
 
-          <form onSubmit={handleSubmit} noValidate className="flex flex-col items-center">
+          <form
+            onSubmit={handleSubmit}
+            noValidate
+            className="flex flex-col items-center"
+          >
             <InputWithLabelE
               value={email}
-              onChange={(e) => setEmail((e.target as HTMLInputElement).value)}
+              onChange={(e) =>
+                setEmail(
+                  typeof e === "string"
+                    ? e
+                    : (e.target as HTMLInputElement).value
+                )
+              }
               name="email"
               error={emailError}
             />
 
             <InputWithLabelPassR
               value={password}
-              onChange={(e) => setPassword((e.target as HTMLInputElement).value)}
+              onChange={(e) =>
+                setPassword(
+                  typeof e === "string"
+                    ? e
+                    : (e.target as HTMLInputElement).value
+                )
+              }
               name="password"
               error={passwordError}
             />
             <InputWithLabelPassCon
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword((e.target as HTMLInputElement).value)}
+              onChange={(e) =>
+                setConfirmPassword(
+                  typeof e === "string"
+                    ? e
+                    : (e.target as HTMLInputElement).value
+                )
+              }
               name="confirmPassword"
               error={confirmPasswordError}
             />
