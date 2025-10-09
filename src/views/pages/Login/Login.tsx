@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useAuthController } from "../../../controllers/AuthController";
 import {
   InputWithLabel,
   InputWithLabelM,
@@ -6,67 +7,67 @@ import {
   InputWithLabelPassM,
 } from "../../components/InputWithLabel";
 import arrow from "../../../assets/arrow-left-svgrepo-com.png";
-import { Link } from "react-router-dom";
 
 const Login: React.FC = () => {
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const {
+    email,
+    password,
+    emailError,
+    passwordError,
+    isLoading,
+    error,
+    success,
+    isMobile,
+    appInfo,
+    setEmail,
+    setPassword,
+    handleSubmit,
+    goToRegister,
+    goToHome,
+  } = useAuthController();
 
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  // Deteksi lebar layar dan update saat resize
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 640);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-  const validate = () => {
-    let valid = true;
-
-    setEmailError("");
-    setPasswordError("");
-
-    if (!email) {
-      setEmailError("Email harus diisi");
-      valid = false;
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      setEmailError("Format email tidak valid");
-      valid = false;
-    }
-
-    if (!password) {
-      setPasswordError("Kata sandi harus diisi");
-      valid = false;
-    } else if (password.length < 6) {
-      setPasswordError("Kata sandi minimal 6 karakter");
-      valid = false;
-    }
-
-    return valid;
-  };
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (validate()) {
-      console.log("Email:", email);
-      console.log("Password:", password);
-    } else {
-      console.log("Form tidak valid");
-    }
-  };
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-white">
+        <div className="text-xl">Logging in...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-white">
-      {/* Jika mobile */}
+      {/* Mobile View */}
       {isMobile ? (
-        <div className="flex flex-col  bg-[#ffff] w-full h-screen text-[#172A3A] ">
-          <img src={arrow} alt="" className="w-[55px] h-[55px] p-[10px]" />
-          <div className="text-[32px]  pt-[5px] pl-[30px] text-left ">
-            Selamat Datang,{" "}
+        <div className="flex flex-col bg-[#ffff] w-full h-screen text-[#172A3A]">
+          <button onClick={goToHome} className="self-start">
+            <img
+              src={arrow}
+              alt="Back"
+              className="w-[55px] h-[55px] p-[10px]"
+            />
+          </button>
+
+          <div className="text-[32px] pt-[5px] pl-[30px] text-left">
+            {appInfo.welcomeMessage}
           </div>
-          <div className="text-[36px]  pt-[5px] pl-[30px] pb-[30px] text-left mb-6">
-            Masuk ke NoFake
+          <div className="text-[36px] pt-[5px] pl-[30px] pb-[30px] text-left mb-6">
+            {appInfo.title}
           </div>
+
+          {/* Success Message */}
+          {success && (
+            <div className="mx-[30px] mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+              {success}
+            </div>
+          )}
+
+          {/* Error Message */}
+          {error && (
+            <div className="mx-[30px] mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+              {error}
+            </div>
+          )}
 
           <form
             onSubmit={handleSubmit}
@@ -90,35 +91,54 @@ const Login: React.FC = () => {
               name="password"
               error={passwordError}
             />
+
             <div className="w-[80%] justify-center mt-[50px]">
               <button
                 type="submit"
-                className="w-full h-[55px] bg-[#345A66] text-[#ffff] border-0 rounded-[5px] text-[18px] hover:bg-gray-100"
+                disabled={isLoading}
+                className="w-full h-[55px] bg-[#345A66] text-[#ffff] border-0 rounded-[5px] text-[18px] hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Masuk
+                {isLoading ? "Memuat..." : appInfo.submitButtonText}
               </button>
 
               <p className="text-sm text-center mt-4 text-[#172A3A]">
-                Belum punya akun?{" "}
-                <Link
-                  to="/register"
-                  className="underline text-[#172A3A] hover:text-gray-200"
+                {appInfo.noAccountText}{" "}
+                <button
+                  type="button"
+                  onClick={goToRegister}
+                  className="underline text-[#172A3A] hover:text-gray-600"
                 >
-                  Daftar
-                </Link>
+                  {appInfo.registerLinkText}
+                </button>
               </p>
             </div>
           </form>
         </div>
       ) : (
-        // Jika desktop
-        <div className="bg-[#315D63] w-[582px] h-[723px] rounded-[10px] shadow-xl px-5  text-[#ffffff]">
+        /* Desktop View */
+        <div className="bg-[#315D63] w-[582px] h-[723px] rounded-[10px] shadow-xl px-5 text-[#ffffff]">
           <div className="p-[50px]">
             <h2 className="text-[28px] text-left mb-2">
-              Selamat Datang Kembali
+              {appInfo.desktopWelcome}
             </h2>
-            <h1 className="text-[36px] text-left font-bold">Masuk ke NoFake</h1>
+            <h1 className="text-[36px] text-left font-bold">
+              {appInfo.desktopTitle}
+            </h1>
           </div>
+
+          {/* Success Message */}
+          {success && (
+            <div className="mx-[50px] mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+              {success}
+            </div>
+          )}
+
+          {/* Error Message */}
+          {error && (
+            <div className="mx-[50px] mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+              {error}
+            </div>
+          )}
 
           <form
             onSubmit={handleSubmit}
@@ -146,20 +166,22 @@ const Login: React.FC = () => {
             <div className="w-[85%] flex justify-center mt-[40px]">
               <button
                 type="submit"
-                className="w-full h-[67px] text-[20px] bg-[#ffff] border-0 text-black rounded-[5px]  hover:bg-gray-100"
+                disabled={isLoading}
+                className="w-full h-[67px] text-[20px] bg-[#ffff] border-0 text-black rounded-[5px] hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Masuk
+                {isLoading ? "Memuat..." : appInfo.submitButtonText}
               </button>
             </div>
 
             <p className="text-center text-sm text-[#ffff] mt-3">
-              Belum punya akun?{" "}
-              <Link
-                to="/register"
+              {appInfo.noAccountText}{" "}
+              <button
+                type="button"
+                onClick={goToRegister}
                 className="underline text-[#ffff] hover:text-gray-200"
               >
-                Daftar
-              </Link>
+                {appInfo.registerLinkText}
+              </button>
             </p>
           </form>
         </div>

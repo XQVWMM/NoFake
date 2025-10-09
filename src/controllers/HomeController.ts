@@ -1,0 +1,61 @@
+import { useState } from "react";
+import { HomeModel } from "../models/HomeModel";
+import type { StatisticData, FeatureData } from "../models/HomeModel";
+
+export type ActiveButton = "daftar" | "masuk" | null;
+
+export interface HomeControllerReturn {
+  activeButton: ActiveButton;
+  statistics: StatisticData[];
+  features: FeatureData[];
+  appInfo: ReturnType<HomeModel["getAppInfo"]>;
+  error: string | null;
+
+  handleButtonClick: (button: "daftar" | "masuk") => void;
+  isActive: (button: "daftar" | "masuk") => boolean;
+  handleStartVerification: () => void;
+  navigateToAuth: (type: "daftar" | "masuk") => void;
+}
+
+export const useHomeController = (): HomeControllerReturn => {
+  const homeModel = new HomeModel();
+
+  const [activeButton, setActiveButton] = useState<ActiveButton>(null);
+  const [features] = useState<FeatureData[]>(homeModel.getFeatures());
+  const [error] = useState<string | null>(null);
+
+  const statistics = homeModel.getStatistics();
+  const appInfo = homeModel.getAppInfo();
+
+  // Button handlers
+  const handleButtonClick = (button: "daftar" | "masuk") => {
+    setActiveButton(button);
+  };
+
+  const isActive = (button: "daftar" | "masuk") => activeButton === button;
+
+  const handleStartVerification = () => {
+    // Future implementation - could navigate to verification page
+    console.log("Starting verification...");
+    // Example: navigate('/verify');
+  };
+
+  const navigateToAuth = (type: "daftar" | "masuk") => {
+    // Future implementation for navigation
+    console.log(`Navigating to ${type}...`);
+    // Example: navigate(`/${type}`);
+  };
+
+  return {
+    activeButton,
+    statistics,
+    features,
+    appInfo,
+    error,
+
+    handleButtonClick,
+    isActive,
+    handleStartVerification,
+    navigateToAuth,
+  };
+};
