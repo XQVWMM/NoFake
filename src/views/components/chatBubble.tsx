@@ -26,7 +26,7 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
 
       {/* Bubble pesan */}
       <div
-        className={`px-4 py-2 rounded-lg mb-2 break-words text-[0.9rem] sm:text-base shadow-sm mx-3 sm:mx-10
+        className={`px-4 py-2 rounded-lg mb-2 break-words text-[0.9rem] sm:text-base mx-3 sm:mx-10
           ${
             isUser
               ? "bg-[#345A66] text-white self-end max-w-[85%] sm:max-w-[70%]"

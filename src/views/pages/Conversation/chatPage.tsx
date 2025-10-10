@@ -176,19 +176,21 @@ const ChatPage: React.FC = () => {
                   : "bg-white hover:bg-gray-100"
               }`}
             >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="w-6 h-6 flex items-center justify-center">
+              <div className="flex items-center justify-between w-full">
+                {/* KIRI: ICON + TITLE */}
+                <div className="flex items-center gap-3 min-w-0 flex-1">
+                  <div className="w-6 h-6 flex-shrink-0 flex items-center justify-center">
                     <img
                       src={isDarkMode ? chatLogoDark : chatLogo}
                       alt="Chat Icon"
                       className="w-full h-full object-contain"
                     />
                   </div>
+
                   <p
-                    className={`text-[clamp(1rem,1.05vw+0.9rem,0.9rem)] truncate 
-                    max-w-[180px] sm:max-w-[280px] md:max-w-[350px] 
-                    ${isDarkMode ? "text-gray-200" : "text-gray-700"}`}
+                    className={`truncate flex-1 min-w-0 text-[clamp(0.85rem,1vw+0.5rem,1.05rem)] ${
+                      isDarkMode ? "text-gray-200" : "text-gray-700"
+                    }`}
                   >
                     {chat.title}
                   </p>
@@ -269,7 +271,6 @@ const ChatPage: React.FC = () => {
               )}
             </button>
 
-            {/* Titik tiga menu */}
             <button
               onClick={() => setShowProfileMenu(!showProfileMenu)}
               className="text-gray-300 text-xl font-bold hover:text-white transition"
@@ -278,7 +279,6 @@ const ChatPage: React.FC = () => {
               ⋯
             </button>
 
-            {/* Dropdown menu profil */}
             {showProfileMenu && (
               <div
                 className={`absolute bottom-16 right-5 rounded-md shadow-lg py-2 w-36 z-50 ${
@@ -311,7 +311,7 @@ const ChatPage: React.FC = () => {
         </div>
       </div>
 
-      {/* CHAT AREA */}
+      {/* Chat*/}
       <div
         className={`flex-1 flex flex-col transition-colors duration-300 ${
           isDarkMode ? "bg-[#172A3A]" : "bg-[#F7FAFC]"
