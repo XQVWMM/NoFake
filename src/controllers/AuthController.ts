@@ -140,7 +140,7 @@ export const useAuthController = (
 
       // Small delay to show success message
       setTimeout(() => {
-        navigation.goToDashboard();
+        navigation.goToChat();
       }, 1000);
     } catch (firebaseError: any) {
       const errorMessage = authModel.getFirebaseErrorMessage(
@@ -167,7 +167,7 @@ export const useAuthController = (
 
       // Small delay to show success message
       setTimeout(() => {
-        navigation.goToDashboard();
+        navigation.goToChat();
       }, 1000);
     } catch (firebaseError: any) {
       const errorMessage = authModel.getFirebaseErrorMessage(

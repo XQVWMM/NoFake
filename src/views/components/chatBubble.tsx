@@ -1,4 +1,5 @@
 import React from "react";
+import ReactMarkdown from "react-markdown";
 
 interface ChatBubbleProps {
   text: string;
@@ -35,7 +36,7 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
               : "text-[#172A3A] font-semibold max-w-[85%] sm:max-w-[70%]"
           }`}
       >
-        {text}
+        <ReactMarkdown>{text}</ReactMarkdown>
       </div>
 
       {/* Garis bawah untuk pesan bot (penuh lebar) */}

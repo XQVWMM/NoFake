@@ -6,18 +6,6 @@
   "files": [
     "dist"
   ],
-  "exports": {
-    "./*": {
-      "import": "./dist/esm/*.js",
-      "require": "./dist/cjs/*.js",
-      "node": "./src/*.ts"
-    },
-    "./dist/*": {
-      "import": "./dist/esm/*",
-      "require": "./dist/cjs/*"
-    },
-    "./src/*": "./src/*.ts"
-  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -25,15 +13,21 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@google/genai": "^1.24.0",
+    "@google/generative-ai": "^0.24.1",
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-select": "^2.2.6",
     "@tailwindcss/vite": "^4.1.14",
+    "cheerio": "^1.1.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dotenv": "^17.2.3",
     "firebase": "^12.3.0",
     "lucide-react": "^0.545.0",
+    "node-fetch": "^3.3.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-markdown": "^10.1.0",
     "react-router-dom": "^7.9.3",
     "tailwind-merge": "^3.3.1"
   },

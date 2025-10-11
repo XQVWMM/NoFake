@@ -1,4 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
+import React from "react";
+import { useChatController } from "../../../controllers/ChatController";
+import { signOut } from "firebase/auth";
+import { auth } from "../../../config/firebase";
 import logo from "../../../assets/transparentBackground.png";
 import chatLogo from "../../../assets/chatIcon.svg";
 import chatLogoDark from "../../../assets/chatIconWhite.svg";
@@ -7,110 +10,133 @@ import sendIcon from "../../../assets/sendIcon.svg";
 import sendIconDark from "../../../assets/sendIconDark.svg";
 import { Moon, Sun, Menu, X } from "lucide-react";
 
-interface ChatItem {
-  title: string;
-  messages: { text: string; isUser: boolean; date?: string }[];
-}
-
 const ChatPage: React.FC = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [chats, setChats] = useState<ChatItem[]>([
-    {
-      title: "Bagaimana saya mengecek keaslian berita?",
-      messages: [
-        { text: "Bagaimana saya mengetahui keaslian berita?", isUser: true },
-        {
-          text: "Pertanyaan yang bagus! Periksa sumbernya terlebih dahulu.",
-          isUser: false,
-        },
-      ],
-    },
-    {
-      title: "Berita ini asli atau sekedar hoax?",
-      messages: [
-        { text: "Apakah berita ini hoax?", isUser: true },
-        { text: "Mari kita periksa bersama.", isUser: false },
-      ],
-    },
-  ]);
+  const {
+    // State
+    chats,
+    activeChat,
+    messages,
+    newMessage,
+    isDarkMode,
+    isSidebarOpen,
+    showProfileMenu,
+    menuChatId,
+    isAnalyzing,
+    isLoading,
+    currentUser,
 
-  const [activeChat, setActiveChat] = useState<number>(0);
-  const [newMessage, setNewMessage] = useState<string>("");
-  const [menuIndex, setMenuIndex] = useState<number | null>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+    // Refs
+    menuRef,
+    messagesEndRef,
 
-  // Auto close menu ketika klik di luar
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setMenuIndex(null);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+    // Handlers
+    setNewMessage,
+    setActiveChat,
+    setShowProfileMenu,
+    setMenuChatId,
 
-  // Scroll otomatis ke bawah ketika pesan baru
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [chats, activeChat]);
+    // Actions
+    handleSend,
+    handleNewChat,
+    handleDeleteChat,
+    handleKeyDown,
 
-  // Close sidebar ketika klik di luar (mobile)
-  useEffect(() => {
-    const handleOutsideSidebar = (e: MouseEvent) => {
-      const sidebar = document.getElementById("sidebar");
-      if (isSidebarOpen && sidebar && !sidebar.contains(e.target as Node)) {
-        setIsSidebarOpen(false);
-      }
-    };
-    if (isSidebarOpen)
-      document.addEventListener("mousedown", handleOutsideSidebar);
-    return () =>
-      document.removeEventListener("mousedown", handleOutsideSidebar);
-  }, [isSidebarOpen]);
+    // Utilities
+    isOlderThan7Days,
+    toggleSidebar,
+    // toggleProfileMenu,
+    toggleDarkMode,
+  } = useChatController();
 
-  const handleSend = (): void => {
-    if (!newMessage.trim()) return;
-
-    const updated = [...chats];
-    updated[activeChat].messages.push({ text: newMessage, isUser: true });
-    setChats(updated);
-    setNewMessage("");
-
-    setTimeout(() => {
-      updated[activeChat].messages.push({
-        text: "Terima kasih! Saya akan bantu periksa.",
-        isUser: false,
-      });
-      setChats([...updated]);
-    }, 1000);
+  // Logout handler
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      setShowProfileMenu(false);
+      // Redirect will be handled by auth state change in the controller
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   };
 
-  const handleNewChat = (): void => {
-    const newChat: ChatItem = {
-      title: `Obrolan ${chats.length + 1}`,
-      messages: [],
-    };
-    setChats([...chats, newChat]);
-    setActiveChat(chats.length);
-  };
+  // Loading state
+  if (isLoading) {
+    return (
+      <div
+        className={`flex h-screen items-center justify-center ${
+          isDarkMode
+            ? "bg-[#0F172A] text-gray-200"
+            : "bg-[#F7FAFC] text-gray-800"
+        }`}
+      >
+        <div className="flex flex-col items-center space-y-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent"></div>
+          <p className="text-lg">Loading your conversations...</p>
+          {currentUser && (
+            <p className="text-sm opacity-75">
+              Welcome back, {currentUser.email}
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
 
-  const handleDeleteChat = (index: number) => {
-    setChats((prev) => prev.filter((_, i) => i !== index));
-    setMenuIndex(null);
-  };
-
-  const isOlderThan7Days = (chat: ChatItem): boolean => {
-    if (chat.messages.length === 0) return false;
-    const date = chat.messages[chat.messages.length - 1].date;
-    if (!date) return false;
-    const diff =
-      (Date.now() - new Date(date).getTime()) / (1000 * 60 * 60 * 24);
-    return diff > 7;
-  };
+  // Authentication check
+  if (!currentUser) {
+    return (
+      <div
+        className={`flex h-screen items-center justify-center ${
+          isDarkMode
+            ? "bg-[#0F172A] text-gray-200"
+            : "bg-[#F7FAFC] text-gray-800"
+        }`}
+      >
+        <div className="flex flex-col items-center space-y-6 max-w-md mx-auto p-8">
+          <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center">
+            <svg
+              className="w-8 h-8 text-white"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+          <div className="text-center">
+            <h2 className="text-2xl font-bold mb-2">Authentication Required</h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              Please log in to access your conversations and save your chat
+              history.
+            </p>
+            <div className="space-y-3">
+              <button
+                onClick={() => (window.location.href = "/login")}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors duration-200"
+              >
+                Sign In
+              </button>
+              <button
+                onClick={() => (window.location.href = "/register")}
+                className="w-full border border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 px-6 py-3 rounded-lg transition-colors duration-200"
+              >
+                Create Account
+              </button>
+              <button
+                onClick={() => (window.location.href = "/")}
+                className="w-full text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 px-6 py-2 transition-colors duration-200"
+              >
+                Go to Home
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -140,7 +166,7 @@ const ChatPage: React.FC = () => {
           <img src={logo} alt="Logo" className="w-36 h-auto object-contain" />
           <button
             className="absolute right-5 md:hidden text-gray-800 dark:text-gray-200 bg-black/30 p-1.5 rounded-md"
-            onClick={() => setIsSidebarOpen(false)}
+            onClick={toggleSidebar}
           >
             <X className="w-5 h-5" />
           </button>
@@ -159,15 +185,14 @@ const ChatPage: React.FC = () => {
 
         {/* Daftar Chat */}
         <div className="flex-1 flex flex-col space-y-3 overflow-y-auto px-4 pb-4">
-          {chats.map((chat, i) => (
+          {chats.map((chat) => (
             <div
-              key={i}
+              key={chat.id}
               onClick={() => {
-                setActiveChat(i);
-                setIsSidebarOpen(false);
+                setActiveChat(chat.id);
               }}
               className={`group relative flex flex-col px-3 py-3 rounded-md shadow-sm cursor-pointer transition ${
-                i === activeChat
+                chat.id === activeChat
                   ? isDarkMode
                     ? "border-l-4 border-gray-400 bg-[#1B263B]"
                     : "border-l-4 border-gray-500 bg-gray-100"
@@ -200,13 +225,13 @@ const ChatPage: React.FC = () => {
                   className={`font-bold cursor-pointer transition-opacity ${
                     isDarkMode ? "text-gray-300" : "text-gray-500"
                   } ${
-                    menuIndex === i
+                    menuChatId === chat.id
                       ? "opacity-100"
                       : "opacity-0 group-hover:opacity-100"
                   }`}
                   onClick={(e) => {
                     e.stopPropagation();
-                    setMenuIndex(menuIndex === i ? null : i);
+                    setMenuChatId(menuChatId === chat.id ? null : chat.id);
                   }}
                 >
                   ⋯
@@ -219,7 +244,7 @@ const ChatPage: React.FC = () => {
                 </p>
               )}
 
-              {menuIndex === i && (
+              {menuChatId === chat.id && (
                 <div
                   ref={menuRef}
                   className={`absolute right-2 top-8 ${
@@ -231,7 +256,7 @@ const ChatPage: React.FC = () => {
                     Share
                   </button>
                   <button
-                    onClick={() => handleDeleteChat(i)}
+                    onClick={() => handleDeleteChat(chat.id)}
                     className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-[#3B1D1D]"
                   >
                     Delete
@@ -250,9 +275,18 @@ const ChatPage: React.FC = () => {
         >
           {/* Profil kiri */}
           <div className="flex items-center space-x-3">
-            <div className="bg-gray-300 w-10 h-10 rounded-full"></div>
+            <div className="bg-gray-300 w-10 h-10 rounded-full flex items-center justify-center">
+              <span className="text-gray-700 font-semibold text-sm">
+                {currentUser?.email?.charAt(0).toUpperCase() || "U"}
+              </span>
+            </div>
             <div className="flex flex-col">
-              <p className="text-sm font-medium text-white">Yohan Estetika</p>
+              <p className="text-sm font-medium text-white">
+                {currentUser?.email || "User"}
+              </p>
+              <p className="text-xs text-gray-300">
+                {chats.length} conversation{chats.length !== 1 ? "s" : ""}
+              </p>
             </div>
           </div>
 
@@ -260,7 +294,7 @@ const ChatPage: React.FC = () => {
           <div className="flex items-center space-x-3">
             {/* Tombol dark mode */}
             <button
-              onClick={() => setIsDarkMode(!isDarkMode)}
+              onClick={toggleDarkMode}
               className="text-gray-300 hover:text-white transition text-xl"
               title="Toggle Dark Mode"
             >
@@ -302,6 +336,7 @@ const ChatPage: React.FC = () => {
                       ? "hover:bg-gray-700 hover:text-white hover:cursor-pointer"
                       : "hover:bg-gray-100 hover:cursor-pointer"
                   }`}
+                  onClick={handleLogout}
                 >
                   Logout
                 </button>
@@ -320,7 +355,7 @@ const ChatPage: React.FC = () => {
         {/* Hamburger (mobile only) */}
         <div className="md:hidden flex items-center p-4">
           <button
-            onClick={() => setIsSidebarOpen(true)}
+            onClick={toggleSidebar}
             className="text-gray-700 dark:text-gray-200"
           >
             <Menu size={24} />
@@ -329,7 +364,7 @@ const ChatPage: React.FC = () => {
 
         {/* Pesan Chat */}
         <div className="flex-1 overflow-y-auto p-8 flex flex-col">
-          {chats[activeChat]?.messages.length === 0 ? (
+          {messages.length === 0 ? (
             <div className="flex-1 flex items-center justify-center">
               <p
                 className={`text-2xl font-semibold text-center animate-fadeIn ${
@@ -341,14 +376,40 @@ const ChatPage: React.FC = () => {
             </div>
           ) : (
             <div className="space-y-4 max-w-4xl mx-auto w-full">
-              {chats[activeChat].messages.map((msg, i) => (
+              {messages.map((msg) => (
                 <ChatBubble
-                  key={i}
-                  text={msg.text}
+                  key={msg.id}
+                  text={msg.message}
                   isUser={msg.isUser}
                   isDarkMode={isDarkMode}
                 />
               ))}
+              {isAnalyzing && (
+                <div className="flex justify-start">
+                  <div
+                    className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+                      isDarkMode
+                        ? "bg-[#2D3748] text-gray-200"
+                        : "bg-gray-200 text-gray-800"
+                    }`}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <div className="flex space-x-1">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
+                        <div
+                          className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+                          style={{ animationDelay: "0.1s" }}
+                        ></div>
+                        <div
+                          className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
+                          style={{ animationDelay: "0.2s" }}
+                        ></div>
+                      </div>
+                      <span className="text-sm">Menganalisis dengan AI...</span>
+                    </div>
+                  </div>
+                </div>
+              )}
               <div ref={messagesEndRef} />
             </div>
           )}
@@ -361,23 +422,31 @@ const ChatPage: React.FC = () => {
               isDarkMode
                 ? "bg-[#1E293B] border-gray-700"
                 : "bg-gray-100 border-gray-300"
-            }`}
+            } ${isAnalyzing ? "opacity-50" : ""}`}
           >
             <input
               type="text"
-              placeholder="Tulis pesan di sini"
+              placeholder={
+                isAnalyzing ? "Sedang menganalisis..." : "Tulis pesan di sini"
+              }
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSend()}
+              onKeyDown={handleKeyDown}
+              disabled={isAnalyzing}
               className={`flex-1 bg-transparent outline-none py-3 ${
                 isDarkMode
                   ? "text-gray-100 placeholder-gray-400"
                   : "text-gray-700 placeholder-gray-500"
-              }`}
+              } ${isAnalyzing ? "cursor-not-allowed" : ""}`}
             />
             <button
               onClick={handleSend}
-              className="transition-transform duration-200 hover:scale-110"
+              disabled={isAnalyzing}
+              className={`transition-transform duration-200 ${
+                isAnalyzing
+                  ? "cursor-not-allowed opacity-50"
+                  : "hover:scale-110"
+              }`}
             >
               <img
                 src={isDarkMode ? sendIconDark : sendIcon}

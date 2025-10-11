@@ -16,7 +16,6 @@ export const useNavigation = () => {
     goHome: () => navigate("/"),
     goToLogin: () => navigate("/login"),
     goToRegister: () => navigate("/register"),
-    goToDashboard: () => navigate("/dashboard"),
     goToChat: () => navigate("/chat"),
   };
 };

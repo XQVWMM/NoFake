@@ -38,9 +38,7 @@ export const useHomeController = (): HomeControllerReturn => {
   const isActive = (button: "daftar" | "masuk") => activeButton === button;
 
   const handleStartVerification = () => {
-    // Future implementation - could navigate to verification page
-    console.log("Starting verification...");
-    // Example: navigate('/verify');
+    navigation.goToChat();
   };
 
   const navigateToAuth = (type: "daftar" | "masuk") => {
