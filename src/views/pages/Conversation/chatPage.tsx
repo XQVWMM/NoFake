@@ -12,9 +12,8 @@ import { Moon, Sun, Menu, X } from "lucide-react";
 import { Profile } from "../Profile";
 
 const ChatPage: React.FC = () => {
-
   const [isProfileOpen, setIsProfileOpen] = React.useState(false);
-  
+
   const {
     // State
     chats,
@@ -86,7 +85,6 @@ const ChatPage: React.FC = () => {
     );
   }
 
-
   // Authentication check
   if (!currentUser) {
     return (
@@ -113,7 +111,11 @@ const ChatPage: React.FC = () => {
           </div>
           <div className="text-center">
             <h2 className="text-2xl font-bold mb-2">Authentication Required</h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
+            <p
+              className={`mb-6 ${
+                isDarkMode ? "text-gray-400" : "text-gray-600"
+              }`}
+            >
               Please log in to access your conversations and save your chat
               history.
             </p>
@@ -126,13 +128,19 @@ const ChatPage: React.FC = () => {
               </button>
               <button
                 onClick={() => (window.location.href = "/register")}
-                className="w-full border border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 px-6 py-3 rounded-lg transition-colors duration-200"
+                className={`w-full border border-blue-600 text-blue-600 px-6 py-3 rounded-lg transition-colors duration-200 ${
+                  isDarkMode ? "hover:bg-blue-900/20" : "hover:bg-blue-50"
+                }`}
               >
                 Create Account
               </button>
               <button
                 onClick={() => (window.location.href = "/")}
-                className="w-full text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 px-6 py-2 transition-colors duration-200"
+                className={`w-full px-6 py-2 transition-colors duration-200 ${
+                  isDarkMode
+                    ? "text-gray-400 hover:text-gray-200"
+                    : "text-gray-600 hover:text-gray-800"
+                }`}
               >
                 Go to Home
               </button>
@@ -170,7 +178,9 @@ const ChatPage: React.FC = () => {
         <div className="flex items-center justify-center relative mt-6 mb-4">
           <img src={logo} alt="Logo" className="w-36 h-auto object-contain" />
           <button
-            className="absolute right-5 md:hidden text-gray-800 dark:text-gray-200 bg-black/30 p-1.5 rounded-md"
+            className={`absolute right-5 md:hidden  bg-black/30 p-1.5 rounded-md ${
+              isDarkMode ? "text-gray-200" : "text-gray-800"
+            }`}
             onClick={toggleSidebar}
           >
             <X className="w-5 h-5" />
@@ -257,12 +267,18 @@ const ChatPage: React.FC = () => {
                   } shadow-lg rounded-md z-50 w-32`}
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <button className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-[#2E3A55]">
+                  <button
+                    className={`w-full text-left px-3 py-2 text-sm hover:cursor-pointer hover:rounded-t-md ${
+                      isDarkMode ? "hover:bg-[#2E3A55]" : "hover:bg-gray-100"
+                    }`}
+                  >
                     Share
                   </button>
                   <button
                     onClick={() => handleDeleteChat(chat.id)}
-                    className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-[#3B1D1D]"
+                    className={`w-full text-left px-3 py-2 text-sm text-red-600 hover:cursor-pointer hover:rounded-b-md ${
+                      isDarkMode ? "hover:bg-[#552e2e]" : "hover:bg-red-50"
+                    }`}
                   >
                     Delete
                   </button>
@@ -280,11 +296,18 @@ const ChatPage: React.FC = () => {
         >
           {/* Profil kiri */}
           <div className="flex items-center space-x-3">
-            <div className="bg-gray-300 w-10 h-10 rounded-full flex items-center justify-center">
+            {/* Avatar - hanya bagian ini bisa ditekan */}
+            <button
+              onClick={() => setIsProfileOpen(true)}
+              className="bg-gray-300 w-10 h-10 rounded-full flex items-center justify-center hover:opacity-80 transition hover:cursor-pointer"
+              title="Profile Settings"
+            >
               <span className="text-gray-700 font-semibold text-sm">
                 {currentUser?.email?.charAt(0).toUpperCase() || "U"}
               </span>
-            </div>
+            </button>
+
+            {/* Info user - tidak bisa diklik */}
             <div className="flex flex-col">
               <p className="text-sm font-medium text-white">
                 {currentUser?.email || "User"}
@@ -295,61 +318,18 @@ const ChatPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Tombol kanan */}
-          <div className="flex items-center space-x-3">
-            {/* Tombol dark mode */}
-            <button
-              onClick={toggleDarkMode}
-              className="text-gray-300 hover:text-white transition text-xl"
-              title="Toggle Dark Mode"
-            >
-              {isDarkMode ? (
-                <Sun className="w-5 h-5 text-yellow-400" />
-              ) : (
-                <Moon className="w-5 h-5 text-gray-200" />
-              )}
-            </button>
-
-            <button
-              onClick={() => setShowProfileMenu(!showProfileMenu)}
-              className="text-gray-300 text-xl font-bold hover:text-white transition"
-              title="Profile Menu"
-            >
-              ⋯
-            </button>
-
-            {showProfileMenu && (
-              <div
-                className={`absolute bottom-16 left rounded-md shadow-lg py-2 w-36 z-50 ${
-                  isDarkMode
-                    ? "bg-[#0D1B2A] text-gray-100"
-                    : "bg-white text-gray-800"
-                }`}
-              >
-                <button
-                  onClick={() => setIsProfileOpen(true)}
-                  className={`block w-full text-left px-4 py-2 text-sm transition-colors duration-150 ${
-                    isDarkMode
-                      ? "hover:bg-gray-700 hover:text-white hover:cursor-pointer"
-                      : "hover:bg-gray-100 hover:cursor-pointer"
-                  }`}
-                >
-                  Settings
-                </button>
-                <button
-                  className={`block w-full text-left px-4 py-2 text-sm transition-colors duration-150 ${
-                    isDarkMode
-                      ? "hover:bg-gray-700 hover:text-white hover:cursor-pointer"
-                      : "hover:bg-gray-100 hover:cursor-pointer"
-                  }`}
-                  onClick={handleLogout}
-                >
-                  Logout
-                </button>
-              </div>
+          {/* Tombol kanan: dark mode toggle */}
+          <button
+            onClick={toggleDarkMode}
+            className="text-gray-300 hover:text-white transition text-xl"
+            title="Toggle Dark Mode"
+          >
+            {isDarkMode ? (
+              <Sun className="w-5 h-5 text-yellow-400" />
+            ) : (
+              <Moon className="w-5 h-5 text-gray-200" />
             )}
-
-          </div>
+          </button>
         </div>
       </div>
 
@@ -363,7 +343,7 @@ const ChatPage: React.FC = () => {
         <div className="md:hidden flex items-center p-4">
           <button
             onClick={toggleSidebar}
-            className="text-gray-700 dark:text-gray-200"
+            className={`${isDarkMode ? "text-white" : "text-gray-900"}`}
           >
             <Menu size={24} />
           </button>
@@ -465,7 +445,10 @@ const ChatPage: React.FC = () => {
         </div>
       </div>
       {isProfileOpen && (
-        <Profile isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
+        <Profile
+          isOpen={isProfileOpen}
+          onClose={() => setIsProfileOpen(false)}
+        />
       )}
     </div>
   );

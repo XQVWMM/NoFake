@@ -27,13 +27,14 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
 
       {/* Bubble pesan */}
       <div
-        className={`px-4 py-2 rounded-lg mb-2 break-words text-[0.9rem] sm:text-base mx-3 sm:mx-10
+        className={`px-4 py-2 rounded-lg mb-2 break-words text-[0.9rem] sm:text-base mx-3 sm:mx-10 transition-all duration-300 ease-out transform
+          ${isUser ? "animate-fadeInRight" : "animate-fadeInLeft"}
           ${
             isUser
-              ? "bg-[#345A66] text-white self-end max-w-[85%] sm:max-w-[70%]"
+              ? "bg-[#345A66] text-white self-end max-w-[85%] sm:max-w-[70%] rounded-br-none"
               : isDarkMode
-              ? "text-gray-100 font-semibold max-w-[85%] sm:max-w-[70%]"
-              : "text-[#172A3A] font-semibold max-w-[85%] sm:max-w-[70%]"
+              ? "text-gray-100 font-medium max-w-[85%] sm:max-w-[70%] text-justify leading-relaxed"
+              : "text-[#172A3A] font-medium max-w-[85%] sm:max-w-[70%] text-justify leading-relaxed"
           }`}
       >
         <ReactMarkdown>{text}</ReactMarkdown>

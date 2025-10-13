@@ -31,7 +31,6 @@ const Profile: React.FC<Profile> = ({ isOpen, onClose }) => {
         setUserId(user.uid);
         setEmail(user.email || "");
 
-        // Fetch user data from Firestore
         try {
           const userDocRef = doc(db, "users", user.uid);
           const userDoc = await getDoc(userDocRef);
@@ -55,9 +54,7 @@ const Profile: React.FC<Profile> = ({ isOpen, onClose }) => {
     setIsLoading(true);
     try {
       const userDocRef = doc(db, "users", userId);
-      await updateDoc(userDocRef, {
-        name: name,
-      });
+      await updateDoc(userDocRef, { name });
       setIsEditing(false);
     } catch (error) {
       console.error("Error updating profile:", error);
@@ -67,15 +64,13 @@ const Profile: React.FC<Profile> = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleEdit = () => {
-    setIsEditing(true);
-  };
+  const handleEdit = () => setIsEditing(true);
 
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      onClose(); // Close the profile modal
-      navigate("/"); // Redirect to home page
+      onClose();
+      navigate("/");
     } catch (error) {
       console.error("Error logging out:", error);
       alert("Gagal keluar. Silakan coba lagi.");
@@ -86,26 +81,31 @@ const Profile: React.FC<Profile> = ({ isOpen, onClose }) => {
     const selectedTheme = e.target.value;
     setTheme(selectedTheme);
 
-    // Update localStorage
     const themeValue = selectedTheme === "Gelap" ? "dark" : "light";
     localStorage.setItem("theme", themeValue);
 
-    // Trigger a storage event to update other components (like chat page)
     window.dispatchEvent(new Event("storage"));
   };
+
+  const isDark = theme === "Gelap";
 
   return (
     <div
       className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
       onClick={onClose}
     >
-      {/* Card popup */}
       <div
-        className="bg-white rounded-xl shadow-lg w-[90%] md:w-[700px] overflow-hidden"
+        className={`rounded-xl shadow-lg w-[90%] md:w-[700px] overflow-hidden transition-all duration-300 ${
+          isDark ? "bg-[#1B263B] text-gray-100" : "bg-white text-gray-900"
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="bg-[#355A64] h-24 relative">
+        <div
+          className={`h-24 relative ${
+            isDark ? "bg-[#345A66]" : "bg-[#355A64]"
+          }`}
+        >
           <div className="absolute -bottom-10 left-10">
             <img
               src={avatar}
@@ -123,29 +123,47 @@ const Profile: React.FC<Profile> = ({ isOpen, onClose }) => {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="text-xl font-semibold text-black border-b border-gray-400 focus:outline-none"
+                  className={`text-xl font-semibold border-b focus:outline-none bg-transparent ${
+                    isDark
+                      ? "border-gray-500 text-gray-100"
+                      : "border-gray-400 text-gray-900"
+                  }`}
                   placeholder="Masukkan nama Anda"
                 />
               ) : (
-                <h2 className="text-xl text-gray-900 font-semibold">
+                <h2
+                  className={`text-xl font-semibold ${
+                    isDark ? "text-gray-100" : "text-gray-900"
+                  }`}
+                >
                   {name || "Nama belum diatur"}
                 </h2>
               )}
-              <p className="text-gray-500 text-base">{email}</p>
+              <p className={isDark ? "text-gray-400" : "text-gray-500"}>
+                {email}
+              </p>
             </div>
             <div>
               {isEditing ? (
                 <button
                   onClick={handleSave}
                   disabled={isLoading}
-                  className="mt-2 text-base text-green-700 font-medium mr-[20px] ml-[20px] disabled:opacity-50"
+                  className={`mt-2 text-base font-medium mr-[20px] ml-[20px] ${
+                    isDark
+                      ? "text-green-400 hover:text-green-300"
+                      : "text-green-700 hover:text-green-800"
+                  } disabled:opacity-50`}
                 >
                   {isLoading ? "Menyimpan..." : "Simpan"}
                 </button>
               ) : (
                 <button
                   onClick={handleEdit}
-                  className="mt-2 text-base text-blue-700 font-medium mr-[20px]"
+                  className={`mt-2 text-base font-medium mr-[20px] ${
+                    isDark
+                      ? "text-blue-400 hover:text-blue-300"
+                      : "text-blue-700 hover:text-blue-800"
+                  }`}
                 >
                   Ubah Profil
                 </button>
@@ -155,13 +173,21 @@ const Profile: React.FC<Profile> = ({ isOpen, onClose }) => {
 
           {/* Tema Dropdown */}
           <div className="mt-6">
-            <label className="block text-base font-medium text-gray-700 mb-1">
+            <label
+              className={`block text-base font-medium mb-1 ${
+                isDark ? "text-gray-300" : "text-gray-700"
+              }`}
+            >
               Tema
             </label>
             <select
               value={theme}
               onChange={handleThemeChange}
-              className="border border-gray-400 rounded-md px-3 py-1.5 text-sm text-gray-900"
+              className={`border rounded-md px-3 py-1.5 text-sm focus:outline-none ${
+                isDark
+                  ? "border-gray-600 bg-[#172A3A] text-gray-100"
+                  : "border-gray-400 bg-white text-gray-900"
+              }`}
             >
               <option value="Gelap">Gelap</option>
               <option value="Terang">Terang</option>
@@ -172,7 +198,11 @@ const Profile: React.FC<Profile> = ({ isOpen, onClose }) => {
           <div className="flex justify-end mt-8">
             <button
               onClick={handleLogout}
-              className="text-red-600 font-semibold text-base hover:text-red-800 transition-colors"
+              className={`font-semibold text-base transition-colors ${
+                isDark
+                  ? "text-red-400 hover:text-red-300"
+                  : "text-red-600 hover:text-red-800"
+              }`}
             >
               Keluar
             </button>
