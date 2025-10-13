@@ -49,7 +49,10 @@ export const useChatController = (): ChatControllerReturn => {
   const [activeChat, setActiveChat] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState<string>("");
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+    const saved = localStorage.getItem("theme");
+    return saved === "dark";
+  });
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [showProfileMenu, setShowProfileMenu] = useState<boolean>(false);
   const [menuChatId, setMenuChatId] = useState<string | null>(null);
@@ -129,6 +132,17 @@ export const useChatController = (): ChatControllerReturn => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Listen for theme changes from localStorage (e.g., from Profile component)
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const saved = localStorage.getItem("theme");
+      setIsDarkMode(saved === "dark");
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
 
   useEffect(() => {
     const handleOutsideSidebar = (e: MouseEvent) => {
@@ -308,7 +322,11 @@ export const useChatController = (): ChatControllerReturn => {
   };
 
   const toggleDarkMode = (): void => {
-    setIsDarkMode(!isDarkMode);
+    setIsDarkMode((prev) => {
+      const newValue = !prev;
+      localStorage.setItem("theme", newValue ? "dark" : "light");
+      return newValue;
+    });
   };
 
   const isOlderThan7Days = (chat: Chat): boolean => {

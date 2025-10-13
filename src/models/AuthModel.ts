@@ -173,6 +173,18 @@ export class AuthModel {
     }
   }
 
+  // Update user name in Firestore
+  async updateUserName(uid: string, name: string): Promise<void> {
+    try {
+      await updateDoc(doc(this.db, "users", uid), {
+        name: name,
+      });
+    } catch (error) {
+      console.error("Update user name error:", error);
+      throw error;
+    }
+  }
+
   // Validation Methods
   validateCredentials(credentials: LoginCredentials): LoginValidationErrors {
     const errors: LoginValidationErrors = {};
