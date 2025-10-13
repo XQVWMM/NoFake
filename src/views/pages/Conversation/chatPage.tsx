@@ -9,8 +9,12 @@ import ChatBubble from "../../components/chatBubble";
 import sendIcon from "../../../assets/sendIcon.svg";
 import sendIconDark from "../../../assets/sendIconDark.svg";
 import { Moon, Sun, Menu, X } from "lucide-react";
+import { Profile } from "../Profile";
 
 const ChatPage: React.FC = () => {
+
+  const [isProfileOpen, setIsProfileOpen] = React.useState(false);
+  
   const {
     // State
     chats,
@@ -81,6 +85,7 @@ const ChatPage: React.FC = () => {
       </div>
     );
   }
+
 
   // Authentication check
   if (!currentUser) {
@@ -315,13 +320,14 @@ const ChatPage: React.FC = () => {
 
             {showProfileMenu && (
               <div
-                className={`absolute bottom-16 right-5 rounded-md shadow-lg py-2 w-36 z-50 ${
+                className={`absolute bottom-16 left rounded-md shadow-lg py-2 w-36 z-50 ${
                   isDarkMode
                     ? "bg-[#0D1B2A] text-gray-100"
                     : "bg-white text-gray-800"
                 }`}
               >
                 <button
+                  onClick={() => setIsProfileOpen(true)}
                   className={`block w-full text-left px-4 py-2 text-sm transition-colors duration-150 ${
                     isDarkMode
                       ? "hover:bg-gray-700 hover:text-white hover:cursor-pointer"
@@ -342,6 +348,7 @@ const ChatPage: React.FC = () => {
                 </button>
               </div>
             )}
+
           </div>
         </div>
       </div>
@@ -457,6 +464,9 @@ const ChatPage: React.FC = () => {
           </div>
         </div>
       </div>
+      {isProfileOpen && (
+        <Profile isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
+      )}
     </div>
   );
 };
