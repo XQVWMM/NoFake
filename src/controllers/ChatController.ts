@@ -247,6 +247,7 @@ export const useChatController = (): ChatControllerReturn => {
             ", "
           )}\n\n---\n*Analisis dilakukan menggunakan AI dan sumber berita Indonesia.*`;
         }
+        console.log("Analisis: ", aiResponseText);
       } else if (analysisResult.status === "NO_ARTICLES_FOUND") {
         aiResponseText = `ℹ️ **Tidak ditemukan artikel untuk: "${userMessageText}"**\n\n${analysisResult.analysis}`;
       } else {

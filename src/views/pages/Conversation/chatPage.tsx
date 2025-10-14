@@ -312,9 +312,9 @@ const ChatPage: React.FC = () => {
               <p className="text-sm font-medium text-white">
                 {currentUser?.email || "User"}
               </p>
-              <p className="text-xs text-gray-300">
+              {/* <p className="text-xs text-gray-300">
                 {chats.length} conversation{chats.length !== 1 ? "s" : ""}
-              </p>
+              </p> */}
             </div>
           </div>
 

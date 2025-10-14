@@ -14,20 +14,20 @@ const INDONESIA_NEWS_SITES = {
     title_selector: ".article-link .articleTitle",
     content_selector: ".articleLead p",
   },
-  // Detik: {
-  //   base_url: "https://www.detik.com",
-  //   search_url: "https://www.detik.com/search/searchall?query=",
-  //   article_selector: ".media__title a",
-  //   title_selector: ".media__title",
-  //   content_selector: ".media__desc",
-  // },
-  // AntaraNews: {
-  //   base_url: "https://www.antaranews.com",
-  //   search_url: "https://www.antaranews.com/search?q=",
-  //   article_selector: ".card__post__content .card__post__title h2 a",
-  //   title_selector: ".card__post__content .card__post__title h2 a",
-  //   content_selector: ".card__post__content p",
-  // },
+  Detik: {
+    base_url: "https://www.detik.com",
+    search_url: "https://www.detik.com/search/searchall?query=",
+    article_selector: ".media__title a",
+    title_selector: ".media__title",
+    content_selector: ".media__desc",
+  },
+  AntaraNews: {
+    base_url: "https://www.antaranews.com",
+    search_url: "https://www.antaranews.com/search?q=",
+    article_selector: ".card__post__content .card__post__title h2 a",
+    title_selector: ".card__post__content .card__post__title h2 a",
+    content_selector: ".card__post__content p",
+  },
 };
 
 const USER_AGENTS = [
@@ -107,11 +107,11 @@ async function fetchWithProxy(
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
       try {
-        console.log(
-          `📡 Trying proxy ${index + 1}${
-            retry > 0 ? ` (retry ${retry})` : ""
-          }: ${proxy}`
-        );
+        // console.log(
+        //   `📡 Trying proxy ${index + 1}${
+        //     retry > 0 ? ` (retry ${retry})` : ""
+        //   }: ${proxy}`
+        // );
 
         const fetchOptions: RequestInit = {
           headers: {
@@ -133,7 +133,7 @@ async function fetchWithProxy(
 
           if (response.ok) {
             const data = await response.json();
-            console.log(`✅ Proxy ${index + 1} successful (allorigins)`);
+            // console.log(`✅ Proxy ${index + 1} successful (allorigins)`);
             return data.contents || "";
           } else {
             throw new Error(`HTTP ${response.status} ${response.statusText}`);
@@ -144,7 +144,7 @@ async function fetchWithProxy(
 
           if (response.ok) {
             const text = await response.text();
-            console.log(`✅ Proxy ${index + 1} successful (thingproxy)`);
+            // console.log(`✅ Proxy ${index + 1} successful (thingproxy)`);
             return text;
           } else {
             throw new Error(`HTTP ${response.status} ${response.statusText}`);
@@ -155,7 +155,7 @@ async function fetchWithProxy(
 
           if (response.ok) {
             const text = await response.text();
-            console.log(`✅ Proxy ${index + 1} successful`);
+            // console.log(`✅ Proxy ${index + 1} successful`);
             return text;
           } else {
             throw new Error(`HTTP ${response.status} ${response.statusText}`);
@@ -165,7 +165,7 @@ async function fetchWithProxy(
         const errorMsg = `Proxy ${index + 1}${
           retry > 0 ? ` (retry ${retry})` : ""
         } failed: ${error instanceof Error ? error.message : "Unknown error"}`;
-        console.warn(`❌ ${errorMsg}`);
+        // console.warn(`❌ ${errorMsg}`);
 
         if (retry === maxRetries) {
           errors.push(errorMsg);
@@ -180,7 +180,7 @@ async function fetchWithProxy(
   }
 
   // If all proxies fail, log detailed errors but DON'T use mock content per user request
-  console.error(`❌ All proxies failed for ${url}. Errors:`, errors);
+  // console.error(`❌ All proxies failed for ${url}. Errors:`, errors);
 
   // Throw error instead of returning mock content
   throw new Error(
@@ -201,7 +201,7 @@ async function searchNewsSite(
     const headers = { "User-Agent": getRandomUserAgent() };
     const searchUrl = siteInfo.search_url + encodeURIComponent(query);
 
-    console.log(`Searching ${siteName}...`);
+    // console.log(`Searching ${siteName}...`);
 
     const html = await fetchWithProxy(searchUrl, headers);
 
@@ -241,7 +241,7 @@ async function searchNewsSite(
 
     return articles;
   } catch (error) {
-    console.error(`Error searching ${siteName}:`, error);
+    // console.error(`Error searching ${siteName}:`, error);
     // Don't return mock articles, let the error propagate up
     throw new Error(
       `Failed to search ${siteName}: ${
@@ -344,8 +344,8 @@ async function searchAllNewsSites(
   const allArticles: Article[] = [];
   const errors: string[] = [];
 
-  console.log(`🔍 Searching for: '${query}'`);
-  console.log("=".repeat(60));
+  // console.log(`🔍 Searching for: '${query}'`);
+  // console.log("=".repeat(60));
 
   for (const [siteName, siteInfo] of Object.entries(INDONESIA_NEWS_SITES)) {
     try {
@@ -356,13 +356,13 @@ async function searchAllNewsSites(
         maxResultsPerSite
       );
       allArticles.push(...articles);
-      console.log(`✅ ${siteName}: Found ${articles.length} articles`);
+      // console.log(`✅ ${siteName}: Found ${articles.length} articles`);
     } catch (error) {
       const errorMsg = `${siteName}: ${
         error instanceof Error ? error.message : "Unknown error"
       }`;
       errors.push(errorMsg);
-      console.warn(`❌ ${errorMsg}`);
+      // console.warn(`❌ ${errorMsg}`);
     }
     // await delay(1000); // Be polite between requests
   }
@@ -380,16 +380,16 @@ async function searchAllNewsSites(
 async function scrapeArticlesContent(articles: Article[]): Promise<Article[]> {
   const results: Article[] = [];
 
-  console.log(`\n📄 Scraping content from ${articles.length} articles...`);
-  console.log("=".repeat(60));
+  // console.log(`\n📄 Scraping content from ${articles.length} articles...`);
+  // console.log("=".repeat(60));
 
   for (let i = 0; i < articles.length; i++) {
     const article = articles[i];
-    console.log(
-      `Scraping ${i + 1}/${articles.length}: ${
-        article.source
-      } - ${article.title.substring(0, 50)}...`
-    );
+    // console.log(
+    //   `Scraping ${i + 1}/${articles.length}: ${
+    //     article.source
+    //   } - ${article.title.substring(0, 50)}...`
+    // );
 
     try {
       const siteInfo =
@@ -404,13 +404,13 @@ async function scrapeArticlesContent(articles: Article[]): Promise<Article[]> {
       article.content = content;
       article.scraped_at = new Date().toISOString();
       results.push(article);
-      console.log(`✅ Successfully scraped content`);
+      // console.log(`✅ Successfully scraped content`);
     } catch (error) {
-      console.warn(
-        `❌ Failed to scrape content: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`
-      );
+      // console.warn(
+      //   `❌ Failed to scrape content: ${
+      //     error instanceof Error ? error.message : "Unknown error"
+      //   }`
+      // );
       // Skip articles that fail to scrape
       continue;
     }
@@ -427,15 +427,15 @@ async function scrapeArticlesContent(articles: Article[]): Promise<Article[]> {
 async function search(query: string): Promise<Article[] | string> {
   try {
     // Step 1: Search all news sites
-    const articles = await searchAllNewsSites(query, 1);
+    const articles = await searchAllNewsSites(query, 3);
 
     if (articles.length === 0) {
       return "NOT FOUND";
     }
 
-    console.log(
-      `✅ Found ${articles.length} articles, proceeding to scrape content...`
-    );
+    // console.log(
+    //   `✅ Found ${articles.length} articles, proceeding to scrape content...`
+    // );
 
     // Step 2: Scrape content from all articles
     const results = await scrapeArticlesContent(articles);
@@ -445,10 +445,10 @@ async function search(query: string): Promise<Article[] | string> {
       return "NOT FOUND";
     }
 
-    console.log(`✅ Successfully scraped ${results.length} articles`);
+    // console.log(`✅ Successfully scraped ${results.length} articles`);
     return results;
   } catch (error) {
-    console.error("Search error:", error);
+    // console.error("Search error:", error);
     return "ERROR";
   }
 }
@@ -492,11 +492,11 @@ async function analyzeWithGemini(
     const newsContext = formatResultsForGemini(searchResults, query);
 
     const prompt = `
-Anda adalah asisten AI fact-checking untuk aplikasi NoFake. Tugas Anda adalah menganalisis informasi berita dan memberikan fact-checking yang akurat dan tidak bias.
+Anda adalah asisten AI fact-checking untuk aplikasi NoFake. Tugas Anda adalah menganalisis informasi berita dan memberikan fact-checking yang akurat dan tidak bias. Sumber knowledge base Anda adalah artikel berita dari sumber terpercaya di Indonesia yang diberikan pada konteks. Tidak ada masa depan atau pengetahuan di luar konteks ini.
 
 Pertanyaan User: "${query}"
 
-Konteks Berita dari sumber Indonesia (Kompas, Detik, AntaraNews):
+Konteks Berita dari sumber Indonesia:
 ${newsContext}
 
 Mohon berikan analisis komprehensif yang mencakup:
@@ -511,16 +511,17 @@ Mohon berikan analisis komprehensif yang mencakup:
 
 5. **Kesimpulan**: Kesimpulan faktual yang jelas dengan tingkat kepercayaan (Tinggi/Sedang/Rendah).
 
-6. **Rekomendasi**: Langkah verifikasi tambahan apa yang akan membantu?
+6. **Sumber Referensi**: Daftar artikel dan sumber yang dirujuk. Hanya perlu mencantumkan format dibawah ini. gunakan format:
+    - [Judul Artikel](URL) - Nama Sumber
 
-Mohon respon dalam bahasa Indonesia, bersikap objektif, dan hindari spekulasi. Jika informasi tidak cukup, nyatakan dengan jelas.
+Mohon respon dalam bahasa Indonesia, bersikap objektif, dan hindari spekulasi. Jika informasi tidak cukup, nyatakan dengan jelas. Format yang diberikan berupa Markup untuk keterbacaan. Gunakan elemen seperti paragraf, daftar, dan heading untuk struktur. Heading harus menggunakan h1, h2, dan h3 secara berurutan dan tidak boleh lebih dari itu.
 `;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
     return response.text();
   } catch (error) {
-    console.error("Gemini analysis error:", error);
+    // console.error("Gemini analysis error:", error);
     return `Error saat analisis AI: ${
       error instanceof Error ? error.message : "Unknown error"
     }. Silakan coba lagi atau verifikasi informasi secara manual.`;
@@ -532,14 +533,18 @@ Mohon respon dalam bahasa Indonesia, bersikap objektif, dan hindari spekulasi. J
  */
 export async function searchAndAnalyze(query: string): Promise<AnalysisResult> {
   try {
-    console.log(`🚀 Starting fact-check analysis for: "${query}"\n`);
+    // console.log(`🚀 Starting fact-check analysis for: "${query}"\n`);
 
-    // Step 1: Search for news articles using real web scraping
-    console.log("🔍 Phase 1: Searching Indonesian news sources...");
-    const searchResults = await search(query);
+    // Step 1: Generate optimized search query
+    // console.log("✨ Phase 1: Generating optimized search query...");
+    const optimizedQuery = await generateOptimizedSearchQuery(query);
 
-    if (searchResults === "NOT FOUND") {
-      console.log("❌ No articles found for the query");
+    // Step 2: Search for news articles using optimized query
+    // console.log("🔍 Phase 2: Searching Indonesian news sources...");
+    const searchResults = await search(optimizedQuery);
+
+    if (searchResults === "NOT_FOUND") {
+      // console.log("❌ No articles found for the query");
       return {
         query: query,
         status: "NO_ARTICLES_FOUND",
@@ -550,7 +555,7 @@ export async function searchAndAnalyze(query: string): Promise<AnalysisResult> {
     }
 
     if (searchResults === "ERROR") {
-      console.log("❌ Error occurred during search");
+      // console.log("❌ Error occurred during search");
       return {
         query: query,
         status: "SEARCH_ERROR",
@@ -563,7 +568,7 @@ export async function searchAndAnalyze(query: string): Promise<AnalysisResult> {
     const articles = searchResults as Article[];
 
     if (!articles || articles.length === 0) {
-      console.log("❌ No articles found for the query");
+      // console.log("❌ No articles found for the query");
       return {
         query: query,
         status: "NO_ARTICLES_FOUND",
@@ -573,15 +578,15 @@ export async function searchAndAnalyze(query: string): Promise<AnalysisResult> {
       };
     }
 
-    console.log(
-      `✅ Found ${articles.length} articles from Indonesian news sources`
-    );
+    // console.log(
+    //   `✅ Found ${articles.length} articles from Indonesian news sources`
+    // );
 
-    // Step 2: Analyze with Gemini AI
-    console.log("\n🤖 Phase 2: Analyzing with Gemini AI...");
+    // Step 3: Analyze with Gemini AI (use original user query for context)
+    // console.log("\n🤖 Phase 3: Analyzing with Gemini AI...");
     const analysis = await analyzeWithGemini(query, articles);
 
-    console.log("✅ Analysis completed\n");
+    // console.log("✅ Analysis completed\n");
 
     return {
       query: query,
@@ -593,7 +598,7 @@ export async function searchAndAnalyze(query: string): Promise<AnalysisResult> {
       sources: [...new Set(articles.map((r: Article) => r.source))],
     };
   } catch (error) {
-    console.error("Error in searchAndAnalyze:", error);
+    // console.error("Error in searchAndAnalyze:", error);
     return {
       query: query,
       status: "ERROR",
@@ -646,7 +651,7 @@ Sekarang berikan judul untuk: "${query}"
 
     return title || "Obrolan Baru";
   } catch (error) {
-    console.error("Error generating chat title:", error);
+    // console.error("Error generating chat title:", error);
     // Return first 50 chars of query as fallback
     return query.length > 50 ? query.substring(0, 47) + "..." : query;
   }
@@ -695,7 +700,7 @@ Pertanyaan User Saat Ini: "${query}"
 Analisis:
 - Jika user menanyakan informasi/berita BARU yang belum pernah dibahas, jawab: VERIFY_INFORMATION
 - Jika user bertanya tentang penjelasan lebih lanjut, detail, atau klarifikasi dari response sebelumnya, jawab: FOLLOWUP_QUESTION
-- Jika user menggunakan kata-kata seperti "maksudnya", "jelaskan lebih lanjut", "apa itu", "bagaimana bisa", "kenapa", jawab: FOLLOWUP_QUESTION
+- Jika user menggunakan kata-kata seperti "maksudnya", "jelaskan lebih lanjut", "apa itu", "bagaimana bisa", "kenapa", jawab: FOLLOWUP_QUESTION, kecuali yang ditanyakan tidak ada atau tidak berdasarkan response sebelumnya, maka jawab: VERIFY_INFORMATION
 - Jika tidak ada riwayat percakapan, jawab: VERIFY_INFORMATION
 
 Jawab HANYA dengan: VERIFY_INFORMATION atau FOLLOWUP_QUESTION
@@ -705,14 +710,14 @@ Jawab HANYA dengan: VERIFY_INFORMATION atau FOLLOWUP_QUESTION
     const response = await result.response;
     const intent = response.text().trim();
 
-    console.log(`🎯 Intent classified: ${intent}`);
+    // console.log(`🎯 Intent classified: ${intent}`);
 
     if (intent.includes("FOLLOWUP_QUESTION")) {
       return "FOLLOWUP_QUESTION";
     }
     return "VERIFY_INFORMATION";
   } catch (error) {
-    console.error("Error classifying intent:", error);
+    // console.error("Error classifying intent:", error);
     // Default to verify information if classification fails
     return "VERIFY_INFORMATION";
   }
@@ -757,10 +762,63 @@ Mohon berikan jawaban yang informatif dan membantu:
     const response = await result.response;
     return response.text();
   } catch (error) {
-    console.error("Error answering follow-up question:", error);
+    // console.error("Error answering follow-up question:", error);
     return `Maaf, terjadi kesalahan saat memproses pertanyaan Anda. Error: ${
       error instanceof Error ? error.message : "Unknown error"
     }. Silakan coba lagi.`;
+  }
+}
+
+/**
+ * Generate optimized search query for news sources using Gemini
+ */
+async function generateOptimizedSearchQuery(
+  userQuery: string
+): Promise<string> {
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+    const prompt = `
+Kamu adalah search query optimizer untuk fact-checking app yang mencari berita di sumber berita Indonesia.
+
+Pertanyaan User: "${userQuery}"
+
+Tugas kamu:
+1. Ekstrak kata kunci penting dari pertanyaan user
+2. Buang kata-kata yang tidak penting (seperti "apakah benar", "benarkah", "tolong cek", dll)
+3. Fokus pada entitas utama (nama orang, tempat, kejadian, organisasi)
+4. Hasilkan query yang optimal untuk search engine berita
+5. Query harus singkat, padat, dan fokus (maksimal 5-7 kata)
+6. Gunakan bahasa Indonesia yang natural untuk pencarian berita
+
+Contoh:
+User: "Apakah benar presiden jokowi akan memperpanjang masa jabatan?"
+Optimized Query: presiden jokowi perpanjang masa jabatan
+
+User: "Benarkah ada gempa besar di jakarta kemarin?"
+Optimized Query: gempa besar jakarta
+
+User: "Tolong cek informasi tentang kenaikan harga BBM bulan ini"
+Optimized Query: kenaikan harga BBM
+
+User: "Apakah vaksin covid-19 menyebabkan efek samping berbahaya?"
+Optimized Query: vaksin covid-19 efek samping
+
+Berikan HANYA query yang dioptimasi tanpa penjelasan tambahan:
+`;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const optimizedQuery = response.text().trim();
+
+    // console.log(`📝 Original query: "${userQuery}"`);
+    // console.log(`✨ Optimized query: "${optimizedQuery}"`);
+
+    return optimizedQuery;
+  } catch (error) {
+    // console.error("Error generating optimized query:", error);
+    // Fallback to original query if optimization fails
+    return userQuery;
   }
 }
 
@@ -773,17 +831,17 @@ export async function searchAndAnalyzeStateful(
   conversationHistory: ConversationContext[] = []
 ): Promise<AnalysisResult> {
   try {
-    console.log(`🚀 Starting stateful fact-check analysis for: "${query}"\n`);
+    // console.log(`🚀 Starting stateful fact-check analysis for: "${query}"\n`);
 
     // Step 1: Classify user intent
-    console.log("🎯 Phase 1: Classifying user intent...");
+    // console.log("🎯 Phase 1: Classifying user intent...");
     const intent = await classifyUserIntent(query, conversationHistory);
 
     if (intent === "FOLLOWUP_QUESTION" && conversationHistory.length > 0) {
       // User is asking about previous responses, no need for web scraping
-      console.log(
-        "💬 Follow-up question detected, using conversation context..."
-      );
+      // console.log(
+      //   "💬 Follow-up question detected, using conversation context..."
+      // );
 
       const answer = await answerFollowUpQuestion(query, conversationHistory);
 
@@ -799,14 +857,18 @@ export async function searchAndAnalyzeStateful(
     }
 
     // Intent is VERIFY_INFORMATION, proceed with web scraping
-    console.log("🔍 New verification request, proceeding with web scraping...");
+    // console.log("🔍 New verification request, proceeding with web scraping...");
 
-    // Step 2: Search for news articles using real web scraping
-    console.log("🔍 Phase 2: Searching Indonesian news sources...");
-    const searchResults = await search(query);
+    // Step 2: Generate optimized search query
+    // console.log("✨ Phase 2: Generating optimized search query...");
+    const optimizedQuery = await generateOptimizedSearchQuery(query);
+
+    // Step 3: Search for news articles using optimized query
+    // console.log("🔍 Phase 3: Searching Indonesian news sources...");
+    const searchResults = await search(optimizedQuery);
 
     if (searchResults === "NOT_FOUND") {
-      console.log("❌ No articles found for the query");
+      // console.log("❌ No articles found for the optimized query");
       return {
         query: query,
         status: "NO_ARTICLES_FOUND",
@@ -817,7 +879,7 @@ export async function searchAndAnalyzeStateful(
     }
 
     if (searchResults === "ERROR") {
-      console.log("❌ Error occurred during search");
+      // console.log("❌ Error occurred during search");
       return {
         query: query,
         status: "SEARCH_ERROR",
@@ -830,7 +892,7 @@ export async function searchAndAnalyzeStateful(
     const articles = searchResults as Article[];
 
     if (!articles || articles.length === 0) {
-      console.log("❌ No articles found for the query");
+      // console.log("❌ No articles found for the optimized query");
       return {
         query: query,
         status: "NO_ARTICLES_FOUND",
@@ -840,15 +902,15 @@ export async function searchAndAnalyzeStateful(
       };
     }
 
-    console.log(
-      `✅ Found ${articles.length} articles from Indonesian news sources`
-    );
+    // console.log(
+    //   `✅ Found ${articles.length} articles from Indonesian news sources`
+    // );
 
-    // Step 3: Analyze with Gemini AI
-    console.log("\n🤖 Phase 3: Analyzing with Gemini AI...");
+    // Step 4: Analyze with Gemini AI (use original user query for context)
+    // console.log("\n🤖 Phase 4: Analyzing with Gemini AI...");
     const analysis = await analyzeWithGemini(query, articles);
 
-    console.log("✅ Analysis completed\n");
+    // console.log("✅ Analysis completed\n");
 
     return {
       query: query,
@@ -860,7 +922,7 @@ export async function searchAndAnalyzeStateful(
       sources: [...new Set(articles.map((r: Article) => r.source))],
     };
   } catch (error) {
-    console.error("Error in searchAndAnalyzeStateful:", error);
+    // console.error("Error in searchAndAnalyzeStateful:", error);
     return {
       query: query,
       status: "ERROR",
