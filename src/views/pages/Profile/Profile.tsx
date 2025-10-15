@@ -1,5 +1,5 @@
 import React from "react";
-import avatar from "../../../assets/avatar.png";
+import avatar from "../../../assets/avatar.jpg";
 import { auth, db } from "../../../config/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { onAuthStateChanged, signOut } from "firebase/auth";
