@@ -43,51 +43,51 @@ const Register: React.FC = () => {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-white">
-      {/* Jika mobile */}
-      {isMobile ? (
-        <div className="flex flex-col  bg-[#ffff] w-full h-screen text-[#172A3A] ">
-          <button onClick={goToHome} className="self-start">
-            <img
-              src={arrow}
-              alt="Back"
-              className="w-[55px] h-[55px] p-[10px]"
-            />
+    <div className="flex flex-col items-center justify-center min-h-screen bg-white text-[#172A3A] px-4">
+      {/* Back button for mobile */}
+      {isMobile && (
+        <div className="self-start mb-2">
+          <button onClick={goToHome} className="p-0">
+            <img src={arrow} alt="Back" className="w-[48px] h-[48px] p-[6px]" />
           </button>
-          <div className="text-[32px]  pt-[5px] pl-[30px] text-left ">
-            {appInfo.welcomeMessage}
-          </div>
-          <div className="text-[32px]  pt-[5px] pl-[30px] text-left mb-[30px]">
-            {appInfo.title}
-          </div>
+        </div>
+      )}
 
-          {/* Success Message */}
-          {success && (
-            <div className="mx-[30px] mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
-              {success}
-            </div>
-          )}
+      {/* Heading - mirip login */}
+      <div className="text-center mt-[-10px] mb-4">
+        <h1 className="text-[38px] font-bold mb-2">Selamat datang!</h1>
+        <div className="text-center mb-10">
+          <span className="text-[22px]">Buat akun </span>
+          <span className="text-[22px] font-semibold">NoFake</span>
+        </div>
+      </div>
 
-          {/* Error Message */}
-          {error && (
-            <div className="mx-[30px] mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-              {error}
-            </div>
-          )}
+      {/* MOBILE VERSION */}
+      {isMobile ? (
+        <div className="bg-[#ffffff] w-full max-w-md rounded-[10px] text-[#172A3A] pb-8">
+          {/* Success / Error */}
+          <div className="px-6 pt-0">
+            {success && (
+              <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+                {success}
+              </div>
+            )}
+            {error && (
+              <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                {error}
+              </div>
+            )}
+          </div>
 
           <form
             onSubmit={handleSubmit}
             noValidate
-            className="flex flex-col items-center w-full space-y-5 text-black"
+            className="flex flex-col items-center space-y-4 px-6"
           >
             <InputWithLabelEE
               value={email}
               onChange={(e) =>
-                setEmail(
-                  typeof e === "string"
-                    ? e
-                    : (e.target as HTMLInputElement).value
-                )
+                setEmail(typeof e === "string" ? e : e.target.value)
               }
               name="email"
               error={emailError}
@@ -96,11 +96,7 @@ const Register: React.FC = () => {
             <InputWithLabelPassRR
               value={password}
               onChange={(e) =>
-                setPassword(
-                  typeof e === "string"
-                    ? e
-                    : (e.target as HTMLInputElement).value
-                )
+                setPassword(typeof e === "string" ? e : e.target.value)
               }
               name="password"
               error={passwordError}
@@ -109,123 +105,96 @@ const Register: React.FC = () => {
             <InputWithLabelPassConn
               value={confirmPassword}
               onChange={(e) =>
-                setConfirmPassword(
-                  typeof e === "string"
-                    ? e
-                    : (e.target as HTMLInputElement).value
-                )
-              }
-              name="confirmPassword"
-              error={confirmPasswordError}
-            />
-            <div className="w-[80%] justify-center mt-[50px]">
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full h-[55px] bg-[#345A66] text-[#ffff] border-0 rounded-[5px] text-[18px] hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isLoading ? "Memuat..." : appInfo.submitButtonText}
-              </button>
-
-              <p className="text-sm text-center text-[#172A3A] mt-4">
-                {(appInfo as any).hasAccountText || "Sudah memiliki akun?"}{" "}
-                <button
-                  type="button"
-                  onClick={goToLogin}
-                  className="underline text-[#172A3A] hover:text-gray-600"
-                >
-                  {(appInfo as any).loginLinkText || "Masuk"}
-                </button>
-              </p>
-            </div>
-          </form>
-        </div>
-      ) : (
-        // Jika desktop
-        <div className="bg-[#315D63] w-[582px] h-[772px] rounded-[10px] shadow-xl text-[#ffffff]">
-          <div className="pl-[40px] pt-[40px] pb-[30px]">
-            <div className="text-[28px] text-left ">{appInfo.desktopTitle}</div>
-          </div>
-
-          {/* Success Message */}
-          {success && (
-            <div className="mx-[40px] mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
-              {success}
-            </div>
-          )}
-
-          {/* Error Message */}
-          {error && (
-            <div className="mx-[40px] mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-              {error}
-            </div>
-          )}
-
-          <form
-            onSubmit={handleSubmit}
-            noValidate
-            className="flex flex-col items-center"
-          >
-            <InputWithLabelE
-              value={email}
-              onChange={(e) =>
-                setEmail(
-                  typeof e === "string"
-                    ? e
-                    : (e.target as HTMLInputElement).value
-                )
-              }
-              name="email"
-              error={emailError}
-            />
-
-            <InputWithLabelPassR
-              value={password}
-              onChange={(e) =>
-                setPassword(
-                  typeof e === "string"
-                    ? e
-                    : (e.target as HTMLInputElement).value
-                )
-              }
-              name="password"
-              error={passwordError}
-            />
-            <InputWithLabelPassCon
-              value={confirmPassword}
-              onChange={(e) =>
-                setConfirmPassword(
-                  typeof e === "string"
-                    ? e
-                    : (e.target as HTMLInputElement).value
-                )
+                setConfirmPassword(typeof e === "string" ? e : e.target.value)
               }
               name="confirmPassword"
               error={confirmPasswordError}
             />
 
-            <div className="w-[85%] flex justify-center mt-[60px]">
+            <div className="w-full mt-4">
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full h-[67px] text-[20px] bg-[#ffff] border-0 text-black rounded-[5px]  hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full h-[52px] bg-[#345A66] text-white rounded-[8px] text-[16px] font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isLoading ? "Memuat..." : appInfo.submitButtonText}
+                {isLoading ? "Memuat..." : appInfo.submitButtonText || "Daftar"}
               </button>
             </div>
 
-            <p className="text-center text-sm text-[#ffff] mt-15">
+            <p className="text-sm text-center text-[#172A3A] mt-1">
               {(appInfo as any).hasAccountText || "Sudah memiliki akun?"}{" "}
               <button
                 type="button"
                 onClick={goToLogin}
-                className="underline text-[#fff] hover:text-gray-200"
+                className="underline text-[#172A3A] hover:text-gray-600"
               >
                 {(appInfo as any).loginLinkText || "Masuk"}
               </button>
             </p>
           </form>
         </div>
+      ) : (
+        // DESKTOP VERSION
+        <form
+          onSubmit={handleSubmit}
+          noValidate
+          className="flex flex-col items-center w-full max-w-sm mx-auto px-6 pb-8 space-y-4 text-[#172A3A]"
+        >
+          {/* Error Message */}
+          {error && (
+            <div className="w-full mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+              {error}
+            </div>
+          )}
+
+          <InputWithLabelE
+            value={email}
+            onChange={(e) =>
+              setEmail(typeof e === "string" ? e : e.target.value)
+            }
+            name="email"
+            error={emailError}
+          />
+
+          <InputWithLabelPassR
+            value={password}
+            onChange={(e) =>
+              setPassword(typeof e === "string" ? e : e.target.value)
+            }
+            name="password"
+            error={passwordError}
+          />
+
+          <InputWithLabelPassCon
+            value={confirmPassword}
+            onChange={(e) =>
+              setConfirmPassword(typeof e === "string" ? e : e.target.value)
+            }
+            name="confirmPassword"
+            error={confirmPasswordError}
+          />
+
+          <div className="w-full flex justify-center mt-2">
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full h-[56px] text-[18px] bg-[#345A66] text-white rounded-[8px] font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#2d4c55] hover:cursor-pointer"
+            >
+              {isLoading ? "Memuat..." : appInfo.submitButtonText || "Daftar"}
+            </button>
+          </div>
+
+          <p className="text-center text-sm text-[#172A3A] mt-2">
+            {(appInfo as any).hasAccountText || "Sudah memiliki akun?"}{" "}
+            <button
+              type="button"
+              onClick={goToLogin}
+              className="underline text-[#345A66] hover:text-gray-600 hover:cursor-pointer"
+            >
+              {(appInfo as any).loginLinkText || "Masuk"}
+            </button>
+          </p>
+        </form>
       )}
     </div>
   );
