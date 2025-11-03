@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useAuthController } from "../../../controllers/AuthController";
 import {
   InputWithLabel,
@@ -13,6 +13,9 @@ import {
 import arrow from "../../../assets/arrow-left-svgrepo-com.png";
 
 const Register: React.FC = () => {
+  useEffect(() => {
+    document.title = "NoFake | Register";
+  }, []);
   const {
     email,
     password,

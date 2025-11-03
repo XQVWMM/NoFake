@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useHomeController } from "@/controllers/HomeController";
 import logo from "../../../assets/logo.png";
 import logo2 from "../../../assets/logo2.png";
@@ -12,6 +12,9 @@ const iconMap = {
 };
 
 const Home: React.FC = () => {
+  useEffect(() => {
+    document.title = "NoFake | Home";
+  }, []);
   const {
     activeButton,
     statistics,
@@ -56,11 +59,11 @@ const Home: React.FC = () => {
 
         <nav className="flex flex-wrap gap-3 sm:gap-6 md:gap-[52px] mt-2 sm:mt-0">
           <button
-              onClick={() => navigate("/pricing")}
-              className="`text-[14px] sm:text-[16px] md:text-[20px] px-5 sm:px-7 md:px-9 py-2 rounded-[10px] hover:underline hover:cursor-pointer"
-            >
+            onClick={() => navigate("/pricing")}
+            className="`text-[14px] sm:text-[16px] md:text-[20px] px-5 sm:px-7 md:px-9 py-2 rounded-[10px] hover:underline hover:cursor-pointer"
+          >
             Langganan
-            </button>
+          </button>
           <button
             className={`text-[14px] sm:text-[16px] md:text-[20px] px-3 sm:px-4 md:px-6 py-2 rounded-[10px] hover:underline hover:cursor-pointer ${
               isActive("daftar")

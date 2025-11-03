@@ -1,23 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import arrowLeft from "../../assets/arrow-left-svgrepo-com.png";
 
 export const Pricing: React.FC = () => {
+  useEffect(() => {
+    document.title = "NoFake | Pricing";
+  }, []);
   const [isMonthly, setIsMonthly] = useState(true);
   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center px-4 py-10">
-    <button
-  onClick={() => navigate("/")}
-  className="absolute hover:cursor-pointer top-4 left-4 md:top-6 md:left-6 flex items-center justify-center rounded-full p-2 hover:bg-gray-100 transition"
->
-  <img
-    src={arrowLeft}
-    alt="Kembali"
-    className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12"
-  />
-</button>
+      <button
+        onClick={() => navigate("/")}
+        className="absolute hover:cursor-pointer top-4 left-4 md:top-6 md:left-6 flex items-center justify-center rounded-full p-2 hover:bg-gray-100 transition"
+      >
+        <img
+          src={arrowLeft}
+          alt="Kembali"
+          className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12"
+        />
+      </button>
       {/* Header */}
       <div className="text-center mb-10">
         <h1 className="text-xl md:text-2xl font-semibold text-gray-800 mb-2 mt-4">
@@ -33,11 +36,15 @@ export const Pricing: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl w-full">
         {/* Gratis */}
         <div className="flex flex-col border border-black/25 shadow-[0_3px_6px_rgba(0,0,0,0.25)] rounded-xl p-6 ">
-          <h2 className="text-3xl font-semibold text-[#345A66] mb-2 mt-6">Gratis</h2>
+          <h2 className="text-3xl font-semibold text-[#345A66] mb-2 mt-6">
+            Gratis
+          </h2>
 
           <div className="flex items-end gap-1 mb-4">
             <p className="text-xs text-[#172A3A] pb-7">Rp</p>
-            <p className="text-5xl font-bold text-[#345A66] leading-none pr-2">0</p>
+            <p className="text-5xl font-bold text-[#345A66] leading-none pr-2">
+              0
+            </p>
             <div className="flex flex-col justify-end leading-tight pb-1">
               <p className="text-[12px] text-[#172A3A]">IDR /</p>
               <p className="text-[12px] text-[#172A3A]">Bulan</p>
@@ -62,7 +69,8 @@ export const Pricing: React.FC = () => {
           </ul>
 
           <p className="text-[#172A3A] text-xs mt-auto pt-6 text-left">
-            Mulai gratis dan rasakan bagaimana NoFake membantu Anda memeriksa berita dengan mudah.
+            Mulai gratis dan rasakan bagaimana NoFake membantu Anda memeriksa
+            berita dengan mudah.
           </p>
           <p className="text-[#172A3A] text-xs mt-auto pt-6 text-center">
             Harga sudah termasuk pajak.
@@ -71,11 +79,15 @@ export const Pricing: React.FC = () => {
 
         {/* Prime1D */}
         <div className="flex flex-col border border-black/25 shadow-[0_3px_6px_rgba(0,0,0,0.25)] rounded-xl p-6">
-          <h2 className="text-3xl font-semibold text-[#345A66] mb-2 mt-6">Prime1D</h2>
+          <h2 className="text-3xl font-semibold text-[#345A66] mb-2 mt-6">
+            Prime1D
+          </h2>
 
           <div className="flex items-end gap-1 mb-4">
             <p className="text-xs text-[#172A3A] pb-7">Rp</p>
-            <p className="text-5xl font-bold text-[#345A66] leading-none pr-2">9.000</p>
+            <p className="text-5xl font-bold text-[#345A66] leading-none pr-2">
+              9.000
+            </p>
             <div className="flex flex-col justify-end leading-tight pb-1">
               <p className="text-[12px] text-[#172A3A]">IDR /</p>
               <p className="text-[12px] text-[#172A3A]">Hari</p>
@@ -99,8 +111,10 @@ export const Pricing: React.FC = () => {
           </ul>
 
           <p className="text-[#172A3A] text-xs mt-auto pt-6 text-left">
-            Butuh verifikasi intens dalam waktu singkat? 
-            <br />Gunakan paket Unlimited 1 Hari - bayar sekali, gunakan sepuasnya tanpa batas.
+            Butuh verifikasi intens dalam waktu singkat?
+            <br />
+            Gunakan paket Unlimited 1 Hari - bayar sekali, gunakan sepuasnya
+            tanpa batas.
           </p>
           <p className="text-[#172A3A] text-xs mt-auto pt-6 text-center">
             Harga sudah termasuk pajak.
@@ -128,7 +142,9 @@ export const Pricing: React.FC = () => {
             </button>
           </div>
 
-          <h2 className="text-3xl font-semibold text-[#345A66] mb-2 mt-6">Pro</h2>
+          <h2 className="text-3xl font-semibold text-[#345A66] mb-2 mt-6">
+            Pro
+          </h2>
 
           <div className="flex items-end gap-1 mb-4">
             <p className="text-xs text-[#172A3A] pb-7">Rp</p>
@@ -137,7 +153,9 @@ export const Pricing: React.FC = () => {
             </p>
             <div className="flex flex-col justify-end leading-tight pb-1">
               <p className="text-[12px] text-[#172A3A]">IDR /</p>
-              <p className="text-[12px] text-[#172A3A]">{isMonthly ? "Bulan" : "Bulan"}</p>
+              <p className="text-[12px] text-[#172A3A]">
+                {isMonthly ? "Bulan" : "Bulan"}
+              </p>
             </div>
           </div>
 
@@ -159,7 +177,8 @@ export const Pricing: React.FC = () => {
           </ul>
 
           <p className="text-[#172A3A] text-xs mt-auto pt-6 text-left">
-            Solusi lengkap untuk profesional yang membutuhkan verifikasi berita cepat, mendalam, dan akurat.
+            Solusi lengkap untuk profesional yang membutuhkan verifikasi berita
+            cepat, mendalam, dan akurat.
           </p>
           <p className="text-[#172A3A] text-xs mt-auto pt-6 text-center">
             Harga sudah termasuk pajak.
