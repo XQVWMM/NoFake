@@ -54,7 +54,7 @@ const Home: React.FC = () => {
 
         <nav className="flex flex-wrap gap-3 sm:gap-6 md:gap-[52px] mt-2 sm:mt-0">
           <button
-            className={`text-[14px] sm:text-[16px] md:text-[20px] px-3 sm:px-4 md:px-6 py-2 rounded-[10px] ${
+            className={`text-[14px] sm:text-[16px] md:text-[20px] px-3 sm:px-4 md:px-6 py-2 rounded-[10px] hover:underline hover:cursor-pointer ${
               isActive("daftar")
                 ? "active-btn text-white"
                 : "text-black bg-transparent"
@@ -64,7 +64,7 @@ const Home: React.FC = () => {
             Daftar
           </button>
           <button
-            className={`text-[14px] sm:text-[16px] md:text-[20px] px-3 sm:px-4 md:px-6 py-2 rounded-[10px] ${
+            className={`text-[14px] sm:text-[16px] md:text-[20px] px-3 sm:px-4 md:px-6 py-2 rounded-[10px] hover:underline hover:cursor-pointer ${
               isActive("masuk")
                 ? "active-btn text-white"
                 : "text-black bg-transparent"
@@ -158,7 +158,7 @@ const Home: React.FC = () => {
               {appInfo.verificationDescription}
             </p>
             <button
-              className="absolute bottom-[30px] right-[30px] sm:right-[68px] min-w-[150px] sm:min-w-[190px] min-h-[45px] sm:min-h-[50px] bg-[#172A3A] text-white rounded-[10px]"
+              className="absolute bottom-[30px] right-[30px] sm:right-[68px] min-w-[150px] sm:min-w-[190px] min-h-[45px] sm:min-h-[50px] bg-[#172A3A] text-white rounded-[10px] hover:cursor-pointer hover:bg-[#142634]"
               onClick={handleStartVerification}
             >
               {appInfo.ctaText}

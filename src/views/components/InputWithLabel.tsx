@@ -21,8 +21,8 @@ export function InputWithLabel({
   error,
 }: InputProps) {
   return (
-    <div className="w-[85%] flex flex-col text-white ">
-      <Label htmlFor="email" className="text-white text-[18px] mb-[10px]">
+    <div className="w-full flex flex-col">
+      <Label htmlFor="email" className="text-[#172A3A] text-[18px] mb-[10px]">
         Email
       </Label>
 
@@ -32,10 +32,14 @@ export function InputWithLabel({
           type="text"
           id="email"
           placeholder="contoh@gmail.com"
-          className={`border-2 pr-10 rounded-[5px] bg-white text-[#315D63]
+          className={`border-2 pl-1 rounded-[5px]  bg-white text-[#315D63]
           placeholder:text-gray-500 placeholder:opacity-90 
           focus:outline-none focus:ring-2  transition
-          ${error ? "border-red-500" : "border-black"}`}
+          ${
+            error
+              ? "border-red-500 border-l-2 border-t-2 border-r-2 border-b-2"
+              : "border-[#75DDDD] border-l-1 border-t-1 border-r-2 border-b-2"
+          }`}
           style={{ textIndent: "10px" }}
           value={value}
           onChange={onChange}
@@ -60,7 +64,7 @@ export function InputWithLabelM({
     <div className="w-[85%] flex flex-col text-black space-y-1 ">
       <Label
         htmlFor="email"
-        className="text-[#172A3A] font-normal text-[18px] mb-[10px]"
+        className="text-[#172A3A] font-semibold text-[18px] mb-[10px]"
       >
         Email
       </Label>
@@ -71,10 +75,14 @@ export function InputWithLabelM({
           type="text"
           id="email"
           placeholder="contoh@gmail.com"
-          className={`border-2 pr-10 rounded-[5px] bg-white text-[#315D63]
+          className={`border-2 pl-1 pr-10 rounded-[5px] bg-white text-[#315D63]
           placeholder:text-gray-500 placeholder:opacity-90 
           focus:outline-none focus:ring-2  transition
-          ${error ? "border-red-500" : "border-black"}`}
+          ${
+            error
+              ? "border-red-500"
+              : "border-[#75DDDD] border-l-1 border-t-1 border-r-2 border-b-2"
+          }`}
           style={{ textIndent: "10px" }}
           value={value}
           onChange={onChange}
@@ -96,8 +104,11 @@ export function InputWithLabelE({
   error,
 }: InputProps) {
   return (
-    <div className="w-[85%] flex flex-col text-white ">
-      <Label htmlFor="email" className="text-white text-[18px] mb-[10px]">
+    <div className="w-full flex flex-col text-white ">
+      <Label
+        htmlFor="email"
+        className="text-[#172A3A] font-semibold text-[18px] mb-[10px]"
+      >
         Email
       </Label>
 
@@ -107,10 +118,14 @@ export function InputWithLabelE({
           type="text"
           id="email"
           placeholder="contoh@gmail.com"
-          className={`border-2 pr-10 rounded-[5px] bg-white text-[#315D63]
+          className={`border-2 pl-1 pr-10 rounded-[5px] bg-white text-[#315D63]
           placeholder:text-gray-500 placeholder:opacity-90 
           focus:outline-none focus:ring-2  transition
-          ${error ? "border-red-500" : "border-black"}`}
+          ${
+            error
+              ? "border-red-500"
+              : "border-[#75DDDD] border-l-1 border-t-1 border-r-2 border-b-2"
+          }`}
           style={{ textIndent: "10px" }}
           value={value}
           onChange={onChange}
@@ -146,10 +161,14 @@ export function InputWithLabelEE({
           type="text"
           id="email"
           placeholder="contoh@gmail.com"
-          className={`border-2 pr-10 rounded-[5px] bg-white text-[#315D63]
+          className={`border-2 pl-1 pr-10 rounded-[5px] bg-white text-[#315D63]
           placeholder:text-gray-500 placeholder:opacity-90 
           focus:outline-none focus:ring-2  transition
-          ${error ? "border-red-500" : "border-black"}`}
+          ${
+            error
+              ? "border-red-500"
+              : "border-[#75DDDD] border-l-1 border-t-1 border-r-2 border-b-2"
+          }`}
           style={{ textIndent: "10px" }}
           value={value}
           onChange={onChange}
@@ -180,10 +199,10 @@ export function InputWithLabelPass({
   };
 
   return (
-    <div className="w-[85%] flex flex-col text-white space-y-1 mt-4 ">
+    <div className="w-full flex flex-col text-white space-y-1 mt-4 ">
       <Label
         htmlFor="password"
-        className="text-white text-[18px] mb-[10px] mt-[10px]"
+        className="text-[#172A3A] text-[18px] mb-[10px] mt-[10px]"
       >
         Kata Sandi
       </Label>
@@ -192,8 +211,12 @@ export function InputWithLabelPass({
           type={isPasswordVisible ? "text" : "password"}
           id="password"
           placeholder="••••••••"
-          className={`w-full rounded-[5px] bg-white text-[#315D63] placeholder:text-[18px] 
-            border-2 ${error ? "border-red-400" : "border-black"} 
+          className={`w-full rounded-[5px] pl-1 bg-white text-[#315D63] placeholder:text-[18px] 
+            border-2 ${
+              error
+                ? "border-red-400"
+                : "border-[#75DDDD] border-l-1 border-t-1 border-r-2 border-b-2"
+            } 
             focus:outline-none focus:ring-2  transition`}
           value={value}
           onChange={onChange}
@@ -201,16 +224,16 @@ export function InputWithLabelPass({
           autoComplete={autocomplete}
           style={{ textIndent: "10px" }}
         />
-        <div className="absolute right-[20px] top-1/2 -translate-y-1/2">
+        <div className="absolute right-[20px] top-1/2 -translate-y-1/2 mt-0.5">
           <button
             type="button"
             onClick={togglePasswordVisibility}
-            className=" focus:ring-0 hover:opacity-100 transition bg-transparent border-none outline-none"
+            className=" focus:ring-0 hover:opacity-100 transition bg-transparent border-none outline-none hover:cursor-pointer"
           >
             <img
               src={isPasswordVisible ? eyes : eyesN}
               alt="Toggle visibility"
-              className="w-[20px] h-[20px]   object-contain select-none pointer-events-none"
+              className="w-[20px] h-[20px] object-contain select-none pointer-events-none"
             />
           </button>
         </div>
@@ -237,7 +260,7 @@ export function InputWithLabelPassM({
     <div className="w-[85%] flex flex-col  space-y-1 mt-4 ">
       <Label
         htmlFor="password"
-        className="text-[#172A3A] font-normal text-[18px] mb-[10px] mt-[30px]"
+        className="text-[#172A3A] font-semibold text-[18px] mb-[10px] mt-[30px]"
       >
         Kata Sandi
       </Label>
@@ -246,8 +269,12 @@ export function InputWithLabelPassM({
           type={isPasswordVisible ? "text" : "password"}
           id="password"
           placeholder="••••••••"
-          className={`w-full rounded-[5px] bg-white text-[#315D63] placeholder:text-[18px] 
-            border-2 ${error ? "border-red-400" : "border-black"} 
+          className={`w-full rounded-[5px] pl-1 bg-white text-[#315D63] placeholder:text-[18px]
+            border-2 ${
+              error
+                ? "border-red-400"
+                : "border-[#75DDDD] border-l-1 border-t-1 border-r-2 border-b-2"
+            } 
             focus:outline-none focus:ring-2  transition`}
           value={value}
           onChange={onChange}
@@ -288,10 +315,10 @@ export function InputWithLabelPassR({
   };
 
   return (
-    <div className="w-[85%] flex flex-col text-white">
+    <div className="w-full flex flex-col text-white">
       <Label
         htmlFor="password"
-        className="text-white text-[18px] mb-[10px] mt-[10px]"
+        className="text-[#172A3A] font-semibold text-[18px] mb-[10px] mt-[10px]"
       >
         Kata Sandi
       </Label>
@@ -300,8 +327,12 @@ export function InputWithLabelPassR({
           type={isPasswordVisible ? "text" : "password"}
           id="password"
           placeholder="••••••••"
-          className={`w-full rounded-[5px] bg-white text-[#315D63] placeholder:text-[18px] 
-            border-2 ${error ? "border-red-400" : "border-black"} 
+          className={`w-full rounded-[5px] pl-1 bg-white text-[#315D63] placeholder:text-[18px]
+            border-2 ${
+              error
+                ? "border-red-400"
+                : "border-[#75DDDD] border-l-1 border-t-1 border-r-2 border-b-2"
+            } 
             focus:outline-none focus:ring-2  transition`}
           value={value}
           onChange={onChange}
@@ -343,7 +374,7 @@ export function InputWithLabelPassRR({
   };
 
   return (
-    <div className="w-[85%] flex flex-col text-white">
+    <div className="w-full flex flex-col text-white">
       <Label
         htmlFor="password"
         className="text-[#172A3A] font-normal text-[18px] mb-[10px] mt-[10px]"
@@ -355,8 +386,12 @@ export function InputWithLabelPassRR({
           type={isPasswordVisible ? "text" : "password"}
           id="password"
           placeholder="••••••••"
-          className={`w-full rounded-[5px] bg-white text-[#315D63] placeholder:text-[18px] 
-            border-2 ${error ? "border-red-400" : "border-black"} 
+          className={`w-full rounded-[5px] pl-1 bg-white text-[#315D63] placeholder:text-[18px]
+            border-2 ${
+              error
+                ? "border-red-400"
+                : "border-[#75DDDD] border-l-1 border-t-1 border-r-2 border-b-2"
+            } 
             focus:outline-none focus:ring-2  transition`}
           value={value}
           onChange={onChange}
@@ -397,10 +432,10 @@ export function InputWithLabelPassCon({
   };
 
   return (
-    <div className="w-[85%] flex flex-col text-white space-y-1 mt-4 ">
+    <div className="w-full flex flex-col text-white space-y-1 mt-2">
       <Label
         htmlFor="password"
-        className="text-white text-[18px] mb-[10px] mt-[10px]"
+        className="text-[#172A3A] font-semibold text-[18px] mb-[10px]"
       >
         Kata Sandi (Konfirmasi)
       </Label>
@@ -409,8 +444,12 @@ export function InputWithLabelPassCon({
           type={isPasswordVisible ? "text" : "password"}
           id="password"
           placeholder="••••••••"
-          className={`w-full rounded-[5px] bg-white text-[#315D63] placeholder:text-[18px] 
-            border-2 ${error ? "border-red-400" : "border-black"} 
+          className={`w-full rounded-[5px] pl-1 bg-white text-[#315D63] placeholder:text-[18px]
+            border-2 ${
+              error
+                ? "border-red-400"
+                : "border-[#75DDDD] border-l-1 border-t-1 border-r-2 border-b-2"
+            } 
             focus:outline-none focus:ring-2  transition`}
           value={value}
           onChange={onChange}
@@ -464,8 +503,12 @@ export function InputWithLabelPassConn({
           type={isPasswordVisible ? "text" : "password"}
           id="password"
           placeholder="••••••••"
-          className={`w-full rounded-[5px] bg-white text-[#315D63] placeholder:text-[18px] 
-            border-2 ${error ? "border-red-400" : "border-black"} 
+          className={`w-full rounded-[5px] pl-1 bg-white text-[#315D63] placeholder:text-[18px]
+            border-2 ${
+              error
+                ? "border-red-400"
+                : "border-[#75DDDD] border-l-1 border-t-1 border-r-2 border-b-2"
+            } 
             focus:outline-none focus:ring-2  transition`}
           value={value}
           onChange={onChange}
