@@ -9,8 +9,8 @@ export const Pricing: React.FC = () => {
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center px-4 py-10">
     <button
-  onClick={() => navigate("/chat")}
-  className="absolute top-4 left-4 md:top-6 md:left-6 flex items-center justify-center rounded-full p-2 hover:bg-gray-100 transition"
+  onClick={() => navigate("/")}
+  className="absolute hover:cursor-pointer top-4 left-4 md:top-6 md:left-6 flex items-center justify-center rounded-full p-2 hover:bg-gray-100 transition"
 >
   <img
     src={arrowLeft}
@@ -133,11 +133,11 @@ export const Pricing: React.FC = () => {
           <div className="flex items-end gap-1 mb-4">
             <p className="text-xs text-[#172A3A] pb-7">Rp</p>
             <p className="text-5xl font-bold text-[#345A66] leading-none pr-2">
-              {isMonthly ? "49.000" : "490.000"}
+              {isMonthly ? "49.000" : "29.000"}
             </p>
             <div className="flex flex-col justify-end leading-tight pb-1">
               <p className="text-[12px] text-[#172A3A]">IDR /</p>
-              <p className="text-[12px] text-[#172A3A]">{isMonthly ? "Bulan" : "Tahun"}</p>
+              <p className="text-[12px] text-[#172A3A]">{isMonthly ? "Bulan" : "Bulan"}</p>
             </div>
           </div>
 

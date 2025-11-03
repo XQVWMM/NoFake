@@ -10,10 +10,13 @@ import sendIcon from "../../../assets/sendIcon.svg";
 import sendIconDark from "../../../assets/sendIconDark.svg";
 import { Moon, Sun, Menu, X } from "lucide-react";
 import { Profile } from "../Profile";
-
+import { useNavigate } from "react-router-dom";
+import dot from "../../../assets/three-dots-vertical-svgrepo-com (1).svg";
 const ChatPage: React.FC = () => {
   const [isProfileOpen, setIsProfileOpen] = React.useState(false);
-
+  const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
+  const navigate = useNavigate();
+  
   const {
     // State
     chats,
@@ -60,6 +63,18 @@ const ChatPage: React.FC = () => {
     } catch (error) {
       console.error("Logout error:", error);
     }
+  };
+
+  const handleProfileClick = () => {
+    setIsDropdownOpen(!isDropdownOpen); 
+  };
+
+  const handleSubscriptionClick = () => {
+    navigate("/pricing"); // Navigasi ke halaman pricing
+    setIsDropdownOpen(false); 
+  };
+    const handleDotClick = () => {
+    setIsDropdownOpen(!isDropdownOpen); // Toggle dropdown
   };
 
   // Loading state
@@ -287,6 +302,15 @@ const ChatPage: React.FC = () => {
             </div>
           ))}
         </div>
+        <div className="flex justify-center items-center">
+  <button
+    onClick={handleSubscriptionClick}
+    className={`w-[95%] py-4 text-center shadow-lg mb-2 rounded-lg hover:cursor-pointer 
+      ${isDarkMode ? 'bg-[#1B263B] text-white hover:bg-[#172A3A]' : 'bg-[#172A3A] text-white hover:bg-[#E2E8F0]'}`}
+  >
+    Berlangganan
+  </button>
+</div>
 
         {/* Profile + Dark Mode Section */}
         <div
@@ -294,8 +318,9 @@ const ChatPage: React.FC = () => {
             isDarkMode ? "bg-[#1B263B]" : "bg-[#172A3A]"
           }`}
         >
+          
           {/* Profil kiri */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-3 relative">
             {/* Avatar - hanya bagian ini bisa ditekan */}
             <button
               onClick={() => setIsProfileOpen(true)}
@@ -316,8 +341,10 @@ const ChatPage: React.FC = () => {
                 {chats.length} conversation{chats.length !== 1 ? "s" : ""}
               </p> */}
             </div>
+                
           </div>
-
+          
+          
           {/* Tombol kanan: dark mode toggle */}
           <button
             onClick={toggleDarkMode}
