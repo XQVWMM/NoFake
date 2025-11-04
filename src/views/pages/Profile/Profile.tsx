@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import avatar from "../../../assets/avatar.jpg";
 import { auth, db } from "../../../config/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
@@ -11,6 +11,9 @@ interface Profile {
 }
 
 const Profile: React.FC<Profile> = ({ isOpen, onClose }) => {
+  useEffect(() => {
+    document.title = "NoFake | Profile";
+  }, []);
   const navigate = useNavigate();
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");

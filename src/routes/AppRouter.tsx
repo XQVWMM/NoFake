@@ -11,7 +11,8 @@ import { Register } from "../views/pages/Register";
 import { Conversation } from "../views/pages/Conversation";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { PublicRoute } from "./PublicRoute";
-import { Pricing } from "../views/pages/Pricing"; 
+import { Pricing } from "../views/pages/Pricing";
+import { ForgotPassword } from "../views/pages/ForgotPassword";
 
 export const AppRouter: React.FC = () => {
   return (
@@ -42,8 +43,9 @@ export const AppRouter: React.FC = () => {
             </ProtectedRoute>
           }
         />
-        
+
         <Route path="/pricing" element={<Pricing />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
