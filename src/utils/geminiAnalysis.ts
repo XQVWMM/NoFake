@@ -2,7 +2,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // Initialize Gemini AI with API key from environment
 const genAI = new GoogleGenerativeAI(
-  import.meta.env.GEMINI_API_KEY || "AIzaSyDDgqQzIWAXOktB38b9HL50lr-flTaiVD8"
+  import.meta.env.GEMINI_API_KEY || "AIzaSyBqHSB__AuqRApGBen_KxenTGX1pZubN6k"
 );
 
 // Indonesian news sites configuration
