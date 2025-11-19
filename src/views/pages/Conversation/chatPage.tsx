@@ -423,7 +423,7 @@ const ChatPage: React.FC = () => {
                           style={{ animationDelay: "0.2s" }}
                         ></div>
                       </div>
-                      <span className="text-sm">Menganalisis dengan AI...</span>
+                      {/* <span className="text-sm">Menganalisis dengan AI...</span> */}
                     </div>
                   </div>
                 </div>

@@ -69,7 +69,7 @@ export const useChatController = (): ChatControllerReturn => {
       setCurrentUser(user);
 
       if (user) {
-        console.log("✅ User authenticated:", user.uid);
+        // console.log("✅ User authenticated:", user.uid);
 
         const userChats = await chatModel.getUserChats(user.uid);
         setChats(userChats);
@@ -82,7 +82,7 @@ export const useChatController = (): ChatControllerReturn => {
           user.uid,
           (updatedChats) => {
             setChats(updatedChats);
-            console.log("📊 Chats updated:", updatedChats.length);
+            // console.log("📊 Chats updated:", updatedChats.length);
           },
           (error) => console.error("❌ Chat subscription error:", error)
         );
@@ -90,7 +90,7 @@ export const useChatController = (): ChatControllerReturn => {
         setIsLoading(false);
         return () => unsubChats();
       } else {
-        console.log("❌ User not authenticated");
+        // console.log("❌ User not authenticated");
         setChats([]);
         setActiveChat(null);
         setMessages([]);
@@ -111,7 +111,7 @@ export const useChatController = (): ChatControllerReturn => {
       activeChat,
       (updatedMessages) => {
         setMessages(updatedMessages);
-        console.log("💬 Messages updated:", updatedMessages.length);
+        // console.log("💬 Messages updated:", updatedMessages.length);
       },
       (error) => console.error("❌ Messages subscription error:", error)
     );
@@ -166,25 +166,21 @@ export const useChatController = (): ChatControllerReturn => {
     setIsAnalyzing(true);
 
     try {
-      // If this is a pending chat (not yet saved to Firestore), create it now
       let chatId = activeChat;
       if (isPendingChat && !activeChat) {
-        console.log("🆕 Creating new chat with temporary title...");
-
-        // Create chat with temporary title immediately so we can save the message
+        // console.log("🆕 Creating new chat with temporary title...");
         chatId = await chatModel.createNewChat(currentUser.uid, "New Chat");
         setActiveChat(chatId);
         setIsPendingChat(false);
-        console.log("✅ New chat created with ID:", chatId);
+        // console.log("✅ New chat created with ID:", chatId);
 
-        // Generate proper title in background (non-blocking)
         generateChatTitle(userMessageText)
           .then(async (aiTitle) => {
-            console.log("🤖 Generated AI title:", aiTitle);
+            // console.log("🤖 Generated AI title:", aiTitle);
             try {
               if (chatId) {
                 await chatModel.updateChatTitle(chatId, aiTitle);
-                console.log("✅ Chat title updated");
+                // console.log("✅ Chat title updated");
               }
             } catch (error) {
               console.error("❌ Error updating chat title:", error);
@@ -200,12 +196,10 @@ export const useChatController = (): ChatControllerReturn => {
         return;
       }
 
-      // Add user message immediately to Firestore (will appear in UI via real-time subscription)
-      console.log("💬 Saving user message to Firestore...");
+      // console.log("💬 Saving user message to Firestore...");
       await chatModel.addMessage(chatId, true, userMessageText);
-      console.log("✅ User message saved");
+      // console.log("✅ User message saved");
 
-      // Build conversation history from current messages for context
       const conversationHistory: ConversationContext[] = messages.map(
         (msg) => ({
           role: msg.isUser ? "user" : "assistant",
@@ -213,17 +207,15 @@ export const useChatController = (): ChatControllerReturn => {
         })
       );
 
-      // Add the current user message to history
       conversationHistory.push({
         role: "user",
         message: userMessageText,
       });
 
-      console.log(
-        `📚 Conversation history: ${conversationHistory.length} messages`
-      );
+      // console.log(
+      //   `📚 Conversation history: ${conversationHistory.length} messages`
+      // );
 
-      // Now get AI analysis with conversation context (stateful)
       const analysisResult = await searchAndAnalyzeStateful(
         userMessageText,
         conversationHistory
@@ -231,12 +223,9 @@ export const useChatController = (): ChatControllerReturn => {
 
       let aiResponseText = "";
       if (analysisResult.status === "SUCCESS") {
-        // Check if this was a follow-up question (no sources)
         if (analysisResult.sourceCount === 0) {
-          // Follow-up question - just show the analysis
           aiResponseText = `💬 **Jawaban:**\n\n${analysisResult.analysis}`;
         } else {
-          // New verification - show full details
           aiResponseText = `🔍 **Hasil Analisis untuk: "${userMessageText}"**\n\n${
             analysisResult.analysis
           }\n\n📊 **Detail:**\n- Status: ${
@@ -247,17 +236,16 @@ export const useChatController = (): ChatControllerReturn => {
             ", "
           )}\n\n---\n*Analisis dilakukan menggunakan AI dan sumber berita Indonesia.*`;
         }
-        console.log("Analisis: ", aiResponseText);
+        // console.log("Analisis: ", aiResponseText);
       } else if (analysisResult.status === "NO_ARTICLES_FOUND") {
         aiResponseText = `ℹ️ **Tidak ditemukan artikel untuk: "${userMessageText}"**\n\n${analysisResult.analysis}`;
       } else {
         aiResponseText = `❌ **Error saat menganalisis: "${userMessageText}"**\n\n${analysisResult.analysis}`;
       }
 
-      // Add AI response to Firestore
-      console.log("🤖 Saving AI response to Firestore...");
+      // console.log("🤖 Saving AI response to Firestore...");
       await chatModel.addMessage(chatId, false, aiResponseText);
-      console.log("✅ Conversation saved to Firestore");
+      // console.log("✅ Conversation saved to Firestore");
     } catch (error) {
       console.error("❌ Error in handleSend:", error);
       const errorMessage = `Maaf, terjadi kesalahan saat menganalisis pesan Anda. Error: ${
@@ -280,12 +268,11 @@ export const useChatController = (): ChatControllerReturn => {
     if (!currentUser) return;
 
     try {
-      // Create a pending chat (not saved to Firestore yet)
-      console.log("🆕 Creating pending chat (will save on first message)");
-      setActiveChat(null); // No chat ID yet
-      setMessages([]); // Clear messages
-      setIsPendingChat(true); // Mark as pending
-      console.log("✅ Pending chat created - waiting for first message");
+      // console.log("🆕 Creating pending chat (will save on first message)");
+      setActiveChat(null);
+      setMessages([]);
+      setIsPendingChat(true);
+      // console.log("✅ Pending chat created - waiting for first message");
     } catch (error) {
       console.error("❌ Error creating pending chat:", error);
     }
@@ -301,7 +288,7 @@ export const useChatController = (): ChatControllerReturn => {
         setActiveChat(remainingChats.length > 0 ? remainingChats[0].id : null);
       }
 
-      console.log("✅ Chat deleted:", chatId);
+      // console.log("✅ Chat deleted:", chatId);
     } catch (error) {
       console.error("❌ Error deleting chat:", error);
     }

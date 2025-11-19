@@ -46,7 +46,6 @@ export class ChatService {
         timestamp: serverTimestamp(),
         userId,
       });
-      console.log("New chat created:", chatRef.id);
       return chatRef.id;
     } catch (error) {
       console.error("Error creating chat:", error);
@@ -58,7 +57,6 @@ export class ChatService {
     try {
       const chatRef = doc(db, this.CHATS_COLLECTION, chatId);
       await updateDoc(chatRef, { title });
-      console.log("Chat title updated:", chatId, title);
     } catch (error) {
       console.error("Error updating chat title:", error);
       throw new Error("Failed to update chat title");
@@ -82,7 +80,6 @@ export class ChatService {
         isUser,
         message,
       });
-      console.log("Message added to chat", chatId, messageDoc.id);
       return messageDoc.id;
     } catch (error) {
       console.error("Error adding message:", error);
@@ -96,10 +93,8 @@ export class ChatService {
     aiResponse: string
   ): Promise<void> {
     try {
-      console.log("Saving conversation pair to chat:", chatId);
       await this.addMessage(chatId, true, userMessage);
       await this.addMessage(chatId, false, aiResponse);
-      console.log("Conversation pair saved successfully");
     } catch (error) {
       console.error("Error saving conversation pair:", error);
       throw new Error("Failed to save conversation pair");
@@ -151,7 +146,6 @@ export class ChatService {
           userId: data.userId,
         });
       });
-      console.log("Retrieved chats for user:", userId, chats.length);
       return chats;
     } catch (error) {
       console.error("Error getting user chats:", error);
@@ -174,7 +168,6 @@ export class ChatService {
       });
       await batch.commit();
       await deleteDoc(doc(db, this.CHATS_COLLECTION, chatId));
-      console.log("Chat and all messages deleted:", chatId);
     } catch (error) {
       console.error("Error deleting chat:", error);
       throw new Error("Failed to delete chat");

@@ -55,7 +55,7 @@ export class ChatMigrationUtil {
     let success = 0;
     let failed = 0;
 
-    console.log(`Starting migration of ${localChats.length} local chats...`);
+    // console.log(`Starting migration of ${localChats.length} local chats...`);
 
     for (const localChat of localChats) {
       try {
@@ -71,7 +71,7 @@ export class ChatMigrationUtil {
         }
 
         success++;
-        console.log(`Migrated chat: "${localChat.title}"`);
+        // console.log(`Migrated chat: "${localChat.title}"`);
       } catch (error) {
         console.error(`Failed to migrate chat "${localChat.title}":`, error);
         failed++;
@@ -81,9 +81,9 @@ export class ChatMigrationUtil {
     // Clear local storage after successful migration
     if (success > 0) {
       this.clearLocalChats();
-      console.log(
-        `Migration completed: ${success} successful, ${failed} failed`
-      );
+      // console.log(
+      //   `Migration completed: ${success} successful, ${failed} failed`
+      // );
     }
 
     return { success, failed };
@@ -95,7 +95,7 @@ export class ChatMigrationUtil {
   static clearLocalChats(): void {
     try {
       localStorage.removeItem(this.LOCAL_STORAGE_KEY);
-      console.log("Local chats cleared");
+      // console.log("Local chats cleared");
     } catch (error) {
       console.error("Error clearing local chats:", error);
     }
@@ -136,7 +136,7 @@ export class ChatMigrationUtil {
       const shouldMigrate = await this.showMigrationPrompt();
 
       if (shouldMigrate) {
-        console.log("User chose to migrate local chats");
+        // console.log("User chose to migrate local chats");
         const result = await this.migrateLocalChatsToFirestore(uid);
 
         if (result.success > 0) {
@@ -155,7 +155,7 @@ export class ChatMigrationUtil {
           );
         }
       } else {
-        console.log("User chose not to migrate local chats");
+        // console.log("User chose not to migrate local chats");
         // Optionally clear local chats or keep them
         // this.clearLocalChats();
       }
